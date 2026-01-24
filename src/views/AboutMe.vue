@@ -18,7 +18,7 @@
           <span class="material-symbols-outlined text-sm ml-auto text-[#9dabb8] hover:text-white">close</span>
         </div>
         <div
-          class="hidden sm:flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px]"
+          class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px]"
           :class="activeTab === 'skills'
             ? 'border-t-2 border-b border-t-primary border-b-[#111418] border-r-[#293038] bg-[#111418] text-white'
             : 'border-b border-b-[#293038] border-r-[#293038] bg-[#161e27] text-[#9dabb8] hover:bg-[#1c242e]'"

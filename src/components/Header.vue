@@ -63,8 +63,80 @@
             </button>
           </div>
           
-          <button class="md:hidden p-2 text-gray-300 hover:text-white">
-            <span class="material-symbols-outlined">menu</span>
+          <button
+            class="md:hidden p-2 text-gray-300 hover:text-white"
+            @click="toggleMobileMenu"
+            :aria-expanded="isMobileOpen ? 'true' : 'false'"
+            aria-label="Toggle navigation"
+          >
+            <span class="material-symbols-outlined">
+              {{ isMobileOpen ? 'close' : 'menu' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div
+        v-if="isMobileOpen"
+        class="md:hidden border-t border-console-border bg-background-dark/95 pb-4"
+      >
+        <nav class="flex flex-col gap-2 pt-4">
+          <router-link
+            to="/about"
+            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
+            active-class="text-primary bg-black/30"
+          >
+            {{ $t('nav.about') }}
+          </router-link>
+          <router-link
+            to="/projects"
+            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
+            active-class="text-primary bg-black/30"
+          >
+            {{ $t('nav.projects') }}
+          </router-link>
+          <router-link
+            to="/blog"
+            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
+            active-class="text-primary bg-black/30"
+          >
+            {{ $t('nav.blog') }}
+          </router-link>
+          <a
+            href="#"
+            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
+          >
+            {{ $t('nav.cv') }}
+          </a>
+        </nav>
+
+        <div class="mt-4 flex flex-col gap-3 px-2">
+          <div class="flex items-center justify-between bg-[#0d1117] border border-console-border px-3 py-1.5 rounded-lg">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LANG:</span>
+              <span class="text-xs font-mono text-green-400">lang --set</span>
+            </div>
+            <div class="relative flex items-center">
+              <select
+                v-model="currentLocale"
+                @change="changeLocale"
+                class="bg-transparent border-none text-xs font-mono text-white focus:ring-0 cursor-pointer py-0 pl-1 pr-4 appearance-none"
+              >
+                <option class="bg-console-bg" value="es">es</option>
+                <option class="bg-console-bg" value="en">en</option>
+                <option class="bg-console-bg" value="de">de</option>
+                <option class="bg-console-bg" value="fr">fr</option>
+              </select>
+              <span class="material-symbols-outlined text-xs text-gray-500 absolute right-0 pointer-events-none">expand_more</span>
+            </div>
+          </div>
+
+          <button
+            class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <span class="material-symbols-outlined text-[18px]">login</span>
+            <span>{{ $t('nav.login') }}</span>
           </button>
         </div>
       </div>
@@ -75,9 +147,12 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { locale } = useI18n()
+const route = useRoute()
 const currentLocale = ref(locale.value)
+const isMobileOpen = ref(false)
 
 const changeLocale = () => {
   locale.value = currentLocale.value
@@ -85,8 +160,20 @@ const changeLocale = () => {
   document.documentElement.lang = currentLocale.value
 }
 
+const toggleMobileMenu = () => {
+  isMobileOpen.value = !isMobileOpen.value
+}
+
 watch(() => locale.value, (newLocale) => {
   currentLocale.value = newLocale
 })
+
+watch(
+  () => route.fullPath,
+  () => {
+    // Cerrar el menú móvil al navegar
+    isMobileOpen.value = false
+  }
+)
 </script>
 
