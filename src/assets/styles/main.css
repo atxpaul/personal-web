@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+select {
+  appearance: none;
+  background-image: none;
+}
+
+/* Code editor-style JSON viewer (skills.json) */
+.code-line {
+  display: block;
+  position: relative;
+  padding-left: 3rem;
+}
+
+.code-line::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  width: 2.5rem;
+  text-align: right;
+  color: #4b5563; /* gray-600 */
+}
+
+.json-key {
+  color: #e06c75;
+}
+
+.json-string {
+  color: #98c379;
+}
+
+.json-punct {
+  color: #abb2bf;
+}
+
