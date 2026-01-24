@@ -18,7 +18,7 @@
     <div class="p-6 md:p-8 space-y-4 md:space-y-6 min-h-[400px]">
       <!-- Init command -->
       <div class="flex flex-col md:flex-row md:items-center gap-2">
-        <span class="text-green-400 whitespace-nowrap">{{ $t('terminal.prompt') }}</span>
+        <span class="text-green-400 whitespace-nowrap">pablo@portfolio:~$</span>
         <span class="text-white">{{ $t('terminal.initCommand') }}</span>
       </div>
       <div class="pl-4 md:pl-0 text-gray-400 space-y-1 text-xs md:text-sm">
@@ -29,7 +29,7 @@
       
       <!-- Name and role -->
       <div class="flex flex-col md:flex-row md:items-start gap-2 pt-4">
-        <span class="text-green-400 whitespace-nowrap">{{ $t('terminal.prompt') }}</span>
+        <span class="text-green-400 whitespace-nowrap">pablo@portfolio:~$</span>
         <div class="flex flex-col gap-2">
           <span class="text-white">{{ $t('terminal.nameCommand') }}</span>
           <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight mt-2">
@@ -43,7 +43,7 @@
       
       <!-- Mission statement -->
       <div class="flex flex-col md:flex-row md:items-start gap-2 pt-4">
-        <span class="text-green-400 whitespace-nowrap">{{ $t('terminal.prompt') }}</span>
+        <span class="text-green-400 whitespace-nowrap">pablo@portfolio:~$</span>
         <div class="flex flex-col gap-4">
           <span class="text-white">{{ $t('terminal.missionCommand') }}</span>
           <p class="text-gray-300 leading-relaxed max-w-2xl border-l-2 border-primary/30 pl-4 py-1">
@@ -66,7 +66,7 @@
       
       <!-- Cursor -->
       <div class="flex items-center gap-2 pt-2">
-        <span class="text-green-400">{{ $t('terminal.prompt') }}</span>
+        <span class="text-green-400">pablo@portfolio:~$</span>
         <div class="w-3 h-5 bg-primary cursor-blink"></div>
       </div>
     </div>
