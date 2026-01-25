@@ -18,7 +18,6 @@
                 v-if="project"
                 :project="project"
                 @view-source="handleViewSource"
-                @deploy="handleDeploy"
             />
 
             <div v-if="loading" class="text-center text-gray-500 py-8">
@@ -40,16 +39,8 @@ import { useData } from '../composables/useData.js';
 const { project, profile, loading, error } = useData();
 
 const handleViewSource = (project) => {
-    console.log('View source:', project);
-    if (project.sourceUrl) {
-        window.open(project.sourceUrl, '_blank');
-    }
-};
-
-const handleDeploy = (project) => {
-    console.log('Deploy:', project);
-    if (project.deployUrl) {
-        window.open(project.deployUrl, '_blank');
+    if (project.github) {
+        window.open(project.github, '_blank', 'noopener,noreferrer');
     }
 };
 </script>

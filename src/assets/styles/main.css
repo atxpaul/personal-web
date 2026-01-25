@@ -45,3 +45,42 @@ select {
   color: #abb2bf;
 }
 
+/* Syntax highlighting for project detail */
+.text-syntax-key {
+  color: #e06c75;
+}
+
+.text-syntax-string {
+  color: #98c379;
+}
+
+.text-syntax-comment {
+  color: #5c6370;
+}
+
+.text-secondary {
+  color: #61afef;
+}
+
+.text-accent {
+  color: #c678dd;
+}
+
+.blinking-cursor {
+  animation: blink 1s step-end infinite;
+}
+
+/* ASCII art architecture diagram */
+pre.architecture-diagram {
+  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
+  font-size: 10px;
+  line-height: 1.2 !important;
+  letter-spacing: 0;
+  white-space: pre !important;
+  tab-size: 8;
+  -moz-tab-size: 8;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+

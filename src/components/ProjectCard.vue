@@ -10,12 +10,17 @@
     </div>
     
     <div class="flex flex-col justify-center p-6 gap-4">
-      <div class="flex items-center gap-2 text-xs font-mono text-primary bg-primary/10 w-fit px-2 py-1 rounded">
+      <div v-if="project.tag || project.provider" class="flex items-center gap-2 text-xs font-mono text-primary bg-primary/10 w-fit px-2 py-1 rounded">
         <span class="material-symbols-outlined text-sm">cloud_queue</span>
-        <span>{{ project.tag }}</span>
+        <span>{{ project.tag || project.provider }}</span>
       </div>
       
-      <h4 class="text-2xl font-bold text-white">{{ project.title }}</h4>
+      <h4 
+        @click="goToProject"
+        class="text-2xl font-bold text-white cursor-pointer hover:text-primary transition-colors"
+      >
+        {{ project.title }}
+      </h4>
       
       <p class="text-gray-400 text-sm leading-relaxed">
         {{ project.description }}
@@ -31,20 +36,13 @@
         </span>
       </div>
       
-      <div class="pt-4 flex gap-3">
+      <div v-if="project.github" class="pt-4">
         <button 
           @click="$emit('view-source', project)"
-          class="flex-1 bg-[#21262d] hover:bg-[#30363d] border border-console-border text-white text-sm font-bold py-2 px-4 rounded transition-colors flex justify-center items-center gap-2"
+          class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded transition-colors flex justify-center items-center gap-2"
         >
           <span class="material-symbols-outlined text-[18px]">code</span>
-          <span>View Source</span>
-        </button>
-        <button 
-          @click="$emit('deploy', project)"
-          class="flex-1 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded transition-colors flex justify-center items-center gap-2"
-        >
-          <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
-          <span>Deploy</span>
+          <span>Ver Código</span>
         </button>
       </div>
     </div>
@@ -52,13 +50,23 @@
 </template>
 
 <script setup>
-defineProps({
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
   project: {
     type: Object,
     required: true
   }
 })
 
-defineEmits(['view-source', 'deploy'])
+const router = useRouter()
+
+const emit = defineEmits(['view-source'])
+
+const goToProject = () => {
+  if (props.project.id) {
+    router.push(`/projects/${props.project.id}`)
+  }
+}
 </script>
 

@@ -1,5 +1,5 @@
 import { ref, onMounted } from 'vue'
-import { getLatestProject, getSocialLinks, getProfileData } from '../data/static.js'
+import { getProjects, getSocialLinks, getProfileData } from '../data/static.js'
 
 // Composable para manejar datos
 // Fácil de cambiar a datos dinámicos del backend en el futuro
@@ -16,13 +16,15 @@ export function useData() {
       error.value = null
       
       // Cargar datos en paralelo
-      const [projectData, socialData, profileData] = await Promise.all([
-        getLatestProject(),
+      const [projectsData, socialData, profileData] = await Promise.all([
+        getProjects(),
         getSocialLinks(),
         getProfileData()
       ])
       
-      project.value = projectData
+      // Obtener el proyecto featured (el primero con featured: true)
+      const featured = projectsData?.find(p => p.featured) || null
+      project.value = featured
       socialLinks.value = socialData
       profile.value = profileData
     } catch (err) {

@@ -201,7 +201,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Sidebar from '../components/Sidebar.vue'
 import { getContactInfo, getMetrics, getTechStack, getSkills } from '../data/static.js'
@@ -209,6 +209,13 @@ import { getContactInfo, getMetrics, getTechStack, getSkills } from '../data/sta
 const { t } = useI18n()
 
 const activeTab = ref('about')
+
+// Proporcionar función para cambiar el tab desde el Sidebar y el estado actual
+const setActiveTab = (tab) => {
+  activeTab.value = tab
+}
+provide('setActiveTab', setActiveTab)
+provide('activeTab', activeTab)
 
 const contactInfo = ref({
   email: 'dev@root.sh',

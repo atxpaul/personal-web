@@ -19,6 +19,11 @@ const routes = [
         component: () => import('../views/Projects.vue'), // Lazy load para más adelante
     },
     {
+        path: '/projects/:id',
+        name: 'ProjectDetail',
+        component: () => import('../views/ProjectDetail.vue'),
+    },
+    {
         path: '/blog',
         name: 'Blog',
         component: () => import('../views/Blog.vue'), // Lazy load para más adelante
