@@ -26,7 +26,10 @@
           <div class="flex items-center bg-console-bg border-t border-x border-console-border rounded-t px-3 py-1 text-xs text-gray-300 font-mono relative top-[5px]">
             <span class="material-symbols-outlined text-[14px] mr-2 text-yellow-500">description</span>
             project_detail.yml
-            <span class="ml-2 hover:text-white cursor-pointer">×</span>
+            <span 
+              @click="goBack"
+              class="ml-2 hover:text-white cursor-pointer"
+            >×</span>
           </div>
         </div>
         <div class="text-xs font-mono text-gray-500">vim</div>
@@ -202,7 +205,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getProjectById, getRelatedProjects } from '../data/static.js'
 
@@ -213,6 +216,35 @@ const project = ref(null)
 const relatedProjects = ref([])
 const loading = ref(true)
 const error = ref(null)
+
+const loadProjectData = async (projectId) => {
+  try {
+    loading.value = true
+    error.value = null
+    
+    const [projectData, relatedData] = await Promise.all([
+      getProjectById(projectId),
+      getRelatedProjects(projectId, 3)
+    ])
+    
+    if (!projectData) {
+      error.value = 'Project not found'
+      project.value = null
+      relatedProjects.value = []
+      return
+    }
+    
+    project.value = projectData
+    relatedProjects.value = relatedData
+  } catch (err) {
+    error.value = err.message || 'Error loading project'
+    console.error('Error loading project:', err)
+    project.value = null
+    relatedProjects.value = []
+  } finally {
+    loading.value = false
+  }
+}
 
 const techStackList = computed(() => {
   if (!project.value) return []
@@ -249,6 +281,10 @@ const formatDate = (dateString) => {
   return `${Math.floor(diffDays / 30)}mo ago`
 }
 
+const goBack = () => {
+  router.push('/projects')
+}
+
 const goToProject = (projectId) => {
   router.push(`/projects/${projectId}`)
 }
@@ -259,29 +295,20 @@ const openGitHub = (url) => {
   }
 }
 
-onMounted(async () => {
-  try {
-    loading.value = true
-    error.value = null
-    
-    const projectId = route.params.id
-    const [projectData, relatedData] = await Promise.all([
-      getProjectById(projectId),
-      getRelatedProjects(projectId, 3)
-    ])
-    
-    if (!projectData) {
-      error.value = 'Project not found'
-      return
+// Cargar datos cuando cambia el ID del proyecto
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      await loadProjectData(newId)
     }
-    
-    project.value = projectData
-    relatedProjects.value = relatedData
-  } catch (err) {
-    error.value = err.message || 'Error loading project'
-    console.error('Error loading project:', err)
-  } finally {
-    loading.value = false
-  }
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  // Scroll al inicio cuando se monta por primera vez
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 </script>
