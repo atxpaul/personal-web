@@ -17,6 +17,21 @@ Portfolio personal con diseño de terminal/CLI, construido con Vue 3 y Tailwind 
 npm install
 ```
 
+### Configuración de Variables de Entorno
+
+1. Copia el archivo de ejemplo de variables de entorno:
+```bash
+cp .env.example .env
+```
+
+2. Edita el archivo `.env` y añade tus credenciales de Firebase:
+   - Ve a [Firebase Console](https://console.firebase.google.com/)
+   - Selecciona tu proyecto
+   - Ve a Configuración del proyecto > Tus aplicaciones
+   - Copia las credenciales a tu archivo `.env`
+
+**⚠️ IMPORTANTE:** El archivo `.env` contiene credenciales sensibles y NO debe ser commiteado al repositorio. Ya está incluido en `.gitignore`.
+
 ## 🛠️ Desarrollo
 
 ```bash

@@ -4,15 +4,22 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
+// Las variables de entorno deben tener el prefijo VITE_ para ser accesibles en el cliente
 const firebaseConfig = {
-  apiKey: "AIzaSyCmroGdpYPU2RpAls54uL4e7-0ZxloBgg4",
-  authDomain: "personal-web-5f1b2.firebaseapp.com",
-  projectId: "personal-web-5f1b2",
-  storageBucket: "personal-web-5f1b2.firebasestorage.app",
-  messagingSenderId: "645709390139",
-  appId: "1:645709390139:web:3eed2f43a3d67d49cc171e",
-  measurementId: "G-HS817B2JPQ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
+// Validar que todas las variables de entorno estén definidas
+if (!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.projectId) {
+  console.error('Error: Faltan variables de entorno de Firebase. Por favor, crea un archivo .env con las credenciales.');
+  throw new Error('Firebase configuration is missing. Please check your .env file.');
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
