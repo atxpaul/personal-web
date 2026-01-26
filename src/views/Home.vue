@@ -35,8 +35,15 @@
 import Terminal from '../components/Terminal.vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import { useData } from '../composables/useData.js';
+import { useAdmin } from '../composables/useAuth.js';
 
 const { project, profile, loading, error } = useData();
+const { isAdmin } = useAdmin();
+
+// TODO: Añadir funcionalidades de edición para admin
+// - Botón de editar proyecto destacado
+// - Editar perfil
+// - Gestión de contenido
 
 const handleViewSource = (project) => {
     if (project.github) {

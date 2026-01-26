@@ -38,6 +38,12 @@
         </nav>
         
         <div class="flex items-center gap-4">
+          <!-- Admin Badge -->
+          <div v-if="isAdmin" class="hidden md:flex items-center gap-2 bg-green-500/20 border border-green-500/50 px-3 py-1.5 rounded-lg">
+            <span class="material-symbols-outlined text-green-400 text-sm">admin_panel_settings</span>
+            <span class="text-xs font-mono text-green-400 uppercase tracking-widest">ADMIN</span>
+          </div>
+          
           <div class="hidden md:flex items-center gap-2 bg-[#0d1117] border border-console-border px-3 py-1.5 rounded-lg">
             <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LANG:</span>
             <div class="relative flex items-center group">
@@ -57,9 +63,21 @@
           </div>
           
           <div class="hidden md:flex">
-            <button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+            <button 
+              v-if="!user"
+              @click="showLoginModal = true"
+              class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+            >
               <span class="material-symbols-outlined text-[18px]">login</span>
               <span>{{ $t('nav.login') }}</span>
+            </button>
+            <button 
+              v-else
+              @click="handleLogout"
+              class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-[18px]">logout</span>
+              <span>{{ $t('nav.logout') }}</span>
             </button>
           </div>
           
@@ -112,6 +130,12 @@
         </nav>
 
         <div class="mt-4 flex flex-col gap-3 px-2">
+          <!-- Admin Badge Mobile -->
+          <div v-if="isAdmin" class="flex items-center justify-center gap-2 bg-green-500/20 border border-green-500/50 px-3 py-1.5 rounded-lg">
+            <span class="material-symbols-outlined text-green-400 text-sm">admin_panel_settings</span>
+            <span class="text-xs font-mono text-green-400 uppercase tracking-widest">ADMIN</span>
+          </div>
+          
           <div class="flex items-center justify-between bg-[#0d1117] border border-console-border px-3 py-1.5 rounded-lg">
             <div class="flex items-center gap-2">
               <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LANG:</span>
@@ -133,14 +157,31 @@
           </div>
 
           <button
+            v-if="!user"
+            @click="showLoginModal = true"
             class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             <span class="material-symbols-outlined text-[18px]">login</span>
             <span>{{ $t('nav.login') }}</span>
           </button>
+          <button
+            v-else
+            @click="handleLogout"
+            class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            <span>{{ $t('nav.logout') }}</span>
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Login Modal -->
+    <LoginModal 
+      :is-open="showLoginModal"
+      @close="showLoginModal = false"
+      @success="handleLoginSuccess"
+    />
   </header>
 </template>
 
@@ -148,11 +189,24 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import { useAuth } from '../composables/useAuth.js'
+import LoginModal from './LoginModal.vue'
 
 const { locale } = useI18n()
 const route = useRoute()
+const { user, logout, isAdmin } = useAuth()
+
 const currentLocale = ref(locale.value)
 const isMobileOpen = ref(false)
+const showLoginModal = ref(false)
+
+const handleLoginSuccess = () => {
+  showLoginModal.value = false
+}
+
+const handleLogout = async () => {
+  await logout()
+}
 
 const changeLocale = () => {
   locale.value = currentLocale.value

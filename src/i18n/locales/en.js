@@ -6,6 +6,7 @@ export default {
         blog: 'cd /blog',
         cv: 'cat cv.pdf',
         login: './login.sh',
+        logout: './logout.sh',
     },
     about: {
         whoami: 'whoami',

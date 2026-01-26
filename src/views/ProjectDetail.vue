@@ -208,9 +208,17 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getProjectById, getRelatedProjects } from '../data/static.js'
+import { useAdmin } from '../composables/useAuth.js'
 
 const route = useRoute()
 const router = useRouter()
+const { isAdmin } = useAdmin()
+
+// TODO: Añadir funcionalidades de edición para admin
+// - Botón de editar proyecto
+// - Editar todos los campos del proyecto
+// - Eliminar proyecto
+// - Cambiar estado (deployed/in progress)
 
 const project = ref(null)
 const relatedProjects = ref([])

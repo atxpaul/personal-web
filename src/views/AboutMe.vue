@@ -205,8 +205,16 @@ import { ref, onMounted, computed, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Sidebar from '../components/Sidebar.vue'
 import { getContactInfo, getMetrics, getTechStack, getSkills } from '../data/static.js'
+import { useAdmin } from '../composables/useAuth.js'
 
 const { t } = useI18n()
+const { isAdmin } = useAdmin()
+
+// TODO: Añadir funcionalidades de edición para admin
+// - Editar información de contacto
+// - Editar métricas del sistema
+// - Editar tech stack
+// - Editar skills.json
 
 const activeTab = ref('about')
 
