@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { initializeFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // Las variables de entorno deben tener el prefijo VITE_ para ser accesibles en el cliente
@@ -32,6 +33,12 @@ if (typeof window !== 'undefined') {
 
 // Initialize Auth
 export const auth = getAuth(app);
+
+// Initialize Firestore with long polling (compatible mode)
+// Esto evita problemas con bloqueadores de anuncios o WebSockets bloqueados
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
 
 export { app, analytics };
 export default app;
