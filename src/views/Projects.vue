@@ -1,5 +1,16 @@
 <template>
-  <div class="flex-grow flex flex-col items-center px-4 py-8 md:px-8">
+  <div class="flex-grow flex flex-col items-center px-4 py-8 md:px-8 relative">
+    <!-- Botón de crear nuevo proyecto (solo admin) -->
+    <AdminOnly>
+      <button
+        @click="handleNewProject"
+        class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-3 px-4 rounded-lg transition-colors flex items-center gap-2 shadow-lg z-50"
+      >
+        <span class="material-symbols-outlined text-lg">add</span>
+        <span>Nuevo Proyecto</span>
+      </button>
+    </AdminOnly>
+
     <!-- Hero / Search Section -->
     <div class="w-full max-w-6xl mb-10">
       <div class="flex flex-col gap-6 md:flex-row md:items-end justify-between">
@@ -156,6 +167,24 @@
                 <span class="material-symbols-outlined text-[20px]">code</span>
                 Ver Código
               </button>
+              
+              <!-- Botones de admin para proyecto destacado -->
+              <AdminOnly>
+                <button
+                  @click="handleEditProject(featuredProject)"
+                  class="bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary py-2.5 px-4 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2"
+                  title="Editar proyecto"
+                >
+                  <span class="material-symbols-outlined text-[20px]">edit</span>
+                </button>
+                <button
+                  @click="handleDeleteProject(featuredProject)"
+                  class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 py-2.5 px-4 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2"
+                  title="Eliminar proyecto"
+                >
+                  <span class="material-symbols-outlined text-[20px]">delete</span>
+                </button>
+              </AdminOnly>
             </div>
           </div>
           <!-- Image/Visual -->
@@ -192,6 +221,26 @@
           :key="project.id"
           class="group relative bg-console-bg border border-console-border rounded-xl p-5 hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(25,127,230,0.1)] flex flex-col h-full"
         >
+          <!-- Botones de admin -->
+          <AdminOnly>
+            <div class="absolute top-3 right-3 flex gap-2 z-10">
+              <button
+                @click.stop="handleEditProject(project)"
+                class="bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary p-1.5 rounded transition-colors"
+                title="Editar proyecto"
+              >
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </button>
+              <button
+                @click.stop="handleDeleteProject(project)"
+                class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 p-1.5 rounded transition-colors"
+                title="Eliminar proyecto"
+              >
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </div>
+          </AdminOnly>
+
           <div class="flex items-start justify-between mb-4">
             <div class="p-2 bg-[#161b22] rounded-lg border border-console-border group-hover:border-primary/30 text-white">
               <span class="material-symbols-outlined">{{ project.icon || 'folder' }}</span>
@@ -229,26 +278,50 @@
         <p>No se encontraron proyectos con los filtros seleccionados.</p>
       </div>
     </div>
+
+    <!-- Modales -->
+    <EditProjectModal
+      :is-open="showEditModal"
+      :project="selectedProject"
+      :is-new="isNewProject"
+      @close="closeEditModal"
+      @saved="handleProjectSaved"
+    />
+
+    <DeleteConfirmModal
+      :is-open="showDeleteModal"
+      :project-id="selectedProjectId"
+      :project-title="selectedProjectTitle"
+      @close="showDeleteModal = false"
+      @deleted="handleProjectDeleted"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { getProjects } from '../data/static.js'
+import { useI18n } from 'vue-i18n'
+import { getProjects as getStaticProjects } from '../data/static.js'
+import { getProjects as getFirestoreProjects } from '../data/firestore.js'
 import { useAdmin } from '../composables/useAuth.js'
+import EditProjectModal from '../components/EditProjectModal.vue'
+import DeleteConfirmModal from '../components/DeleteConfirmModal.vue'
+import AdminOnly from '../components/AdminOnly.vue'
 
 const router = useRouter()
+const { locale } = useI18n()
 const { isAdmin } = useAdmin()
 
-// TODO: Añadir funcionalidades de edición para admin
-// - Botón para añadir nuevo proyecto
-// - Botón para editar cada proyecto
-// - Botón para eliminar proyecto
-// - Cambiar proyecto destacado
 const projects = ref([])
 const searchQuery = ref('')
 const activeFilter = ref('all')
+const showEditModal = ref(false)
+const showDeleteModal = ref(false)
+const selectedProject = ref(null)
+const selectedProjectId = ref('')
+const selectedProjectTitle = ref('')
+const isNewProject = ref(false)
 
 const featuredProject = computed(() => {
   // Obtener el primer proyecto con featured: true
@@ -329,10 +402,67 @@ const formatDate = (dateString) => {
   return `${Math.floor(diffDays / 30)}mo ago`
 }
 
-onMounted(async () => {
-  const projectsData = await getProjects()
-  if (projectsData) {
-    projects.value = projectsData
+// Cargar proyectos desde Firestore con fallback a static
+const loadProjects = async () => {
+  try {
+    // Intentar cargar desde Firestore
+    const firestoreProjects = await getFirestoreProjects(locale.value)
+    if (firestoreProjects && firestoreProjects.length > 0) {
+      projects.value = firestoreProjects
+      return
+    }
+  } catch (err) {
+    console.warn('Error loading from Firestore, using static data:', err)
   }
+  
+  // Fallback a datos estáticos
+  const staticProjects = await getStaticProjects()
+  if (staticProjects) {
+    projects.value = staticProjects
+  }
+}
+
+// Cargar proyectos cuando cambia el idioma
+watch(locale, () => {
+  loadProjects()
+}, { immediate: true })
+
+// Funciones de gestión de proyectos (admin)
+const handleNewProject = () => {
+  selectedProject.value = null
+  isNewProject.value = true
+  showEditModal.value = true
+}
+
+const handleEditProject = (project) => {
+  selectedProject.value = project
+  isNewProject.value = false
+  showEditModal.value = true
+}
+
+const handleDeleteProject = (project) => {
+  selectedProjectId.value = project.id
+  selectedProjectTitle.value = project.title
+  showDeleteModal.value = true
+}
+
+const closeEditModal = () => {
+  showEditModal.value = false
+  selectedProject.value = null
+  isNewProject.value = false
+}
+
+const handleProjectSaved = () => {
+  // Recargar proyectos después de guardar
+  loadProjects()
+}
+
+const handleProjectDeleted = () => {
+  // Recargar proyectos después de eliminar
+  loadProjects()
+}
+
+onMounted(async () => {
+  await loadProjects()
 })
 </script>

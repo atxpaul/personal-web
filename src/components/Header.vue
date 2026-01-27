@@ -55,8 +55,6 @@
               >
                 <option class="bg-console-bg" value="es">es</option>
                 <option class="bg-console-bg" value="en">en</option>
-                <option class="bg-console-bg" value="de">de</option>
-                <option class="bg-console-bg" value="fr">fr</option>
               </select>
               <span class="material-symbols-outlined text-xs text-gray-500 absolute right-0 pointer-events-none">expand_more</span>
             </div>
@@ -149,8 +147,6 @@
               >
                 <option class="bg-console-bg" value="es">es</option>
                 <option class="bg-console-bg" value="en">en</option>
-                <option class="bg-console-bg" value="de">de</option>
-                <option class="bg-console-bg" value="fr">fr</option>
               </select>
               <span class="material-symbols-outlined text-xs text-gray-500 absolute right-0 pointer-events-none">expand_more</span>
             </div>

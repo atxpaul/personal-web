@@ -4,6 +4,16 @@
 
     <!-- Main Content Area: Code Editor View -->
     <main class="flex-1 flex flex-col bg-[#111418] overflow-hidden relative">
+      <!-- Botón de edición para admin -->
+      <AdminOnly>
+        <button
+          @click="showEditModal = true"
+          class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-3 px-4 rounded-lg transition-colors flex items-center gap-2 shadow-lg z-50"
+        >
+          <span class="material-symbols-outlined text-lg">edit</span>
+          <span>Editar</span>
+        </button>
+      </AdminOnly>
       <!-- Tab Bar (Simulated) -->
       <div class="flex h-9 bg-[#111418] border-b border-[#293038]">
         <div
@@ -47,7 +57,7 @@
               <p
                 class="text-[#9dabb8] text-lg md:text-xl font-normal leading-relaxed mt-4 border-l-2 border-[#293038] pl-4"
               >
-                {{ $t('about.intro') }}
+                {{ aboutMeData?.intro || $t('about.intro') }}
               </p>
             </div>
 
@@ -56,11 +66,11 @@
               <div class="lg:col-span-2 text-[#9dabb8] space-y-4 leading-relaxed">
                 <p>
                   <span class="text-primary font-medium"> &gt; </span>
-                  {{ $t('about.description1') }}
+                  {{ aboutMeData?.description1 || $t('about.description1') }}
                 </p>
                 <p>
                   <span class="text-primary font-medium"> &gt; </span>
-                  {{ $t('about.description2') }}
+                  {{ aboutMeData?.description2 || $t('about.description2') }}
                 </p>
 
                 <div class="mt-6 p-4 bg-[#161e27] border border-[#293038] rounded-lg font-mono text-sm">
@@ -197,24 +207,30 @@
         </div>
       </div>
     </main>
+
+    <!-- Modal de edición -->
+    <EditAboutModal
+      :is-open="showEditModal"
+      :initial-data="aboutMeData"
+      @close="showEditModal = false"
+      @saved="handleAboutSaved"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, provide } from 'vue'
+import { ref, onMounted, computed, provide, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Sidebar from '../components/Sidebar.vue'
+import EditAboutModal from '../components/EditAboutModal.vue'
+import AdminOnly from '../components/AdminOnly.vue'
 import { getContactInfo, getMetrics, getTechStack, getSkills } from '../data/static.js'
+import { getAboutMe } from '../data/firestore.js'
 import { useAdmin } from '../composables/useAuth.js'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { isAdmin } = useAdmin()
-
-// TODO: Añadir funcionalidades de edición para admin
-// - Editar información de contacto
-// - Editar métricas del sistema
-// - Editar tech stack
-// - Editar skills.json
+const showEditModal = ref(false)
 
 const activeTab = ref('about')
 
@@ -275,6 +291,7 @@ const techStack = ref({
 })
 
 const skills = ref(null)
+const aboutMeData = ref(null)
 
 const skillsLines = computed(() => {
   if (!skills.value) return []
@@ -282,14 +299,58 @@ const skillsLines = computed(() => {
   return jsonString.split('\n')
 })
 
-onMounted(async () => {
-  // En el futuro, estos datos vendrán del backend
+// Cargar datos de About desde Firestore con fallback a static
+const loadAboutMeData = async () => {
+  try {
+    // Intentar cargar desde Firestore
+    const firestoreData = await getAboutMe(locale.value)
+    if (firestoreData) {
+      aboutMeData.value = firestoreData
+      // Actualizar los refs locales con los datos de Firestore
+      if (firestoreData.contactInfo) {
+        contactInfo.value = firestoreData.contactInfo
+      }
+      if (firestoreData.metrics) {
+        metrics.value = firestoreData.metrics
+      }
+      return
+    }
+  } catch (err) {
+    console.warn('Error loading from Firestore, using static data:', err)
+  }
+  
+  // Fallback a datos estáticos
   const contact = await getContactInfo()
   if (contact) contactInfo.value = contact
 
   const metricsData = await getMetrics()
   if (metricsData) metrics.value = metricsData
 
+  // Crear objeto aboutMeData con datos estáticos
+  aboutMeData.value = {
+    intro: t('about.intro'),
+    description1: t('about.description1'),
+    description2: t('about.description2'),
+    contactInfo: contactInfo.value,
+    metrics: metrics.value
+  }
+}
+
+// Cargar datos cuando cambia el idioma
+watch(locale, () => {
+  loadAboutMeData()
+}, { immediate: true })
+
+const handleAboutSaved = () => {
+  // Recargar datos después de guardar
+  loadAboutMeData()
+}
+
+onMounted(async () => {
+  // Cargar datos de About
+  await loadAboutMeData()
+
+  // Cargar tech stack y skills (estos no se editan por ahora)
   const tech = await getTechStack()
   if (tech) techStack.value = tech
 
