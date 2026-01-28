@@ -25,9 +25,10 @@
                         <span class="text-primary">ls</span> -la ./projects
                     </h1>
                     <p class="text-gray-400 max-w-2xl text-base md:text-lg">
-                        Explorando soluciones de infraestructura como código,
-                        orquestación de contenedores y pipelines de
-                        automatización.
+                        {{
+                            projectsSubtitle ||
+                            'Explorando soluciones de infraestructura como código, orquestación de contenedores y pipelines de automatización.'
+                        }}
                     </p>
                 </div>
             </div>
@@ -62,6 +63,22 @@
                         EXECUTE
                     </button>
                 </div>
+            </div>
+
+            <!-- Botón de editar subtítulo (solo admin) -->
+            <div class="flex justify-end mt-6">
+                <AdminOnly>
+                    <button
+                        @click="handleEditSubtitle"
+                        class="flex items-center gap-2 px-3 py-1.5 rounded text-sm font-mono transition-colors bg-console-bg border border-console-border text-gray-400 hover:border-primary hover:text-primary"
+                        title="Editar subtítulo"
+                    >
+                        <span class="material-symbols-outlined text-[16px]"
+                            >edit</span
+                        >
+                        Editar subtítulo
+                    </button>
+                </AdminOnly>
             </div>
 
             <!-- Chips / Filters -->
@@ -318,7 +335,7 @@
                 <span class="text-primary material-symbols-outlined"
                     >folder_open</span
                 >
-                Otros Repositorios
+                More Repositories
             </h3>
             <div
                 v-if="filteredProjects.length > 0"
@@ -419,6 +436,13 @@
             @close="showDeleteModal = false"
             @deleted="handleProjectDeleted"
         />
+
+        <EditProjectsSubtitleModal
+            :is-open="showEditSubtitleModal"
+            :initial-subtitle="projectsSubtitle"
+            @close="showEditSubtitleModal = false"
+            @saved="handleSubtitleSaved"
+        />
     </div>
 </template>
 
@@ -427,10 +451,14 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { getProjects as getStaticProjects } from '../data/static.js';
-import { getProjects as getFirestoreProjects } from '../data/firestore.js';
+import {
+    getProjects as getFirestoreProjects,
+    getProjectsSubtitle,
+} from '../data/firestore.js';
 import { useAdmin } from '../composables/useAuth.js';
 import EditProjectModal from '../components/EditProjectModal.vue';
 import DeleteConfirmModal from '../components/DeleteConfirmModal.vue';
+import EditProjectsSubtitleModal from '../components/EditProjectsSubtitleModal.vue';
 import AdminOnly from '../components/AdminOnly.vue';
 
 const router = useRouter();
@@ -438,10 +466,12 @@ const { locale } = useI18n();
 const { isAdmin } = useAdmin();
 
 const projects = ref([]);
+const projectsSubtitle = ref('');
 const searchQuery = ref('');
 const activeFilter = ref('all');
 const showEditModal = ref(false);
 const showDeleteModal = ref(false);
+const showEditSubtitleModal = ref(false);
 const selectedProject = ref(null);
 const selectedProjectId = ref('');
 const selectedProjectTitle = ref('');
@@ -557,11 +587,34 @@ const loadProjects = async () => {
     }
 };
 
-// Cargar proyectos cuando cambia el idioma
+// Cargar subtítulo desde Firestore
+const loadProjectsSubtitle = async () => {
+    try {
+        const subtitle = await getProjectsSubtitle(locale.value);
+        if (subtitle) {
+            projectsSubtitle.value = subtitle;
+        } else {
+            // Si no hay subtítulo en el idioma actual, intentar con el otro
+            const otherLocale = locale.value === 'es' ? 'en' : 'es';
+            const otherSubtitle = await getProjectsSubtitle(otherLocale);
+            if (otherSubtitle) {
+                projectsSubtitle.value = otherSubtitle;
+            } else {
+                projectsSubtitle.value = '';
+            }
+        }
+    } catch (err) {
+        console.warn('Error loading projects subtitle from Firestore:', err);
+        projectsSubtitle.value = '';
+    }
+};
+
+// Cargar proyectos y subtítulo cuando cambia el idioma
 watch(
     locale,
     () => {
         loadProjects();
+        loadProjectsSubtitle();
     },
     { immediate: true },
 );
@@ -601,7 +654,17 @@ const handleProjectDeleted = () => {
     loadProjects();
 };
 
+const handleEditSubtitle = () => {
+    showEditSubtitleModal.value = true;
+};
+
+const handleSubtitleSaved = () => {
+    // Recargar subtítulo después de guardar
+    loadProjectsSubtitle();
+};
+
 onMounted(async () => {
     await loadProjects();
+    await loadProjectsSubtitle();
 });
 </script>

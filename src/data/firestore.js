@@ -162,6 +162,84 @@ export const getSkills = async () => {
 };
 
 /**
+ * Obtener subtítulo de la página de proyectos
+ * @param {string} locale - Idioma ('es' o 'en')
+ * @returns {Promise<string|null>}
+ */
+export const getProjectsSubtitle = async (locale = 'es') => {
+    try {
+        const docRef = doc(db, 'site', 'projects');
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Retornar subtítulo del idioma específico o del otro idioma, o null
+            return (
+                data[locale]?.subtitle ||
+                data.es?.subtitle ||
+                data.en?.subtitle ||
+                null
+            );
+        }
+        return null;
+    } catch (error) {
+        console.error('Error getting projects subtitle:', error);
+        throw error;
+    }
+};
+
+/**
+ * Guardar subtítulo de la página de proyectos
+ * @param {string} locale - Idioma ('es' o 'en')
+ * @param {string} subtitle - Subtítulo a guardar
+ * @param {Object} auth - Objeto de autenticación de Firebase (opcional)
+ * @returns {Promise<void>}
+ */
+export const saveProjectsSubtitle = async (locale, subtitle, auth = null) => {
+    try {
+        // Verificar que el usuario esté autenticado
+        if (auth && !auth.currentUser) {
+            throw new Error(
+                'Debes estar autenticado para guardar el subtítulo',
+            );
+        }
+
+        const docRef = doc(db, 'site', 'projects');
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            // Actualizar solo el idioma específico
+            const existingData = docSnap.data();
+            await updateDoc(docRef, {
+                [locale]: {
+                    ...existingData[locale],
+                    subtitle: subtitle,
+                },
+                updatedAt: new Date().toISOString(),
+            });
+        } else {
+            // Crear documento nuevo
+            await setDoc(docRef, {
+                [locale]: {
+                    subtitle: subtitle,
+                },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            });
+        }
+    } catch (error) {
+        console.error('Error saving projects subtitle:', error);
+        // Proporcionar mensajes de error más descriptivos
+        if (error.code === 'permission-denied') {
+            throw new Error(
+                'No tienes permisos para guardar. Verifica que estés autenticado como admin y que el documento /site/admins exista con tu UID.',
+            );
+        }
+        throw error;
+    }
+};
+
+/**
  * Guardar skills (site/skills)
  * @param {Object} skillsData - Datos de skills
  * @param {Object} auth - Objeto de autenticación de Firebase (opcional)
@@ -191,6 +269,69 @@ export const saveSkills = async (skillsData, auth = null) => {
         }
     } catch (error) {
         console.error('Error saving skills:', error);
+        if (error.code === 'permission-denied') {
+            throw new Error(
+                'No tienes permisos para guardar. Verifica que estés autenticado como admin.',
+            );
+        }
+        throw error;
+    }
+};
+
+/**
+ * Obtener tech stack (site/techstack)
+ * @returns {Promise<Object|null>}
+ */
+export const getTechStack = async () => {
+    try {
+        const docRef = doc(db, 'site', 'techstack');
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Filtrar campos de metadatos (createdAt, updatedAt) y retornar solo las categorías
+            const { createdAt, updatedAt, ...techStackData } = data;
+            return techStackData;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error getting tech stack:', error);
+        throw error;
+    }
+};
+
+/**
+ * Guardar tech stack (site/techstack)
+ * @param {Object} techStackData - Datos del tech stack (estructura: { core: [{name, color}], scripting: [...] })
+ * @param {Object} auth - Objeto de autenticación de Firebase (opcional)
+ * @returns {Promise<void>}
+ */
+export const saveTechStack = async (techStackData, auth = null) => {
+    try {
+        // Verificar que el usuario esté autenticado
+        if (auth && !auth.currentUser) {
+            throw new Error(
+                'Debes estar autenticado para guardar el tech stack',
+            );
+        }
+
+        const docRef = doc(db, 'site', 'techstack');
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            await updateDoc(docRef, {
+                ...techStackData,
+                updatedAt: new Date().toISOString(),
+            });
+        } else {
+            await setDoc(docRef, {
+                ...techStackData,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            });
+        }
+    } catch (error) {
+        console.error('Error saving tech stack:', error);
         if (error.code === 'permission-denied') {
             throw new Error(
                 'No tienes permisos para guardar. Verifica que estés autenticado como admin.',

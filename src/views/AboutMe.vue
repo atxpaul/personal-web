@@ -238,23 +238,40 @@
                         </div>
 
                         <!-- Skills / Chips Component -->
-                        <div class="mb-10">
-                            <h3
-                                class="text-white text-lg font-bold mb-4 flex items-center gap-2"
-                            >
-                                <span
-                                    class="material-symbols-outlined text-primary"
-                                    >extension</span
+                        <div class="mb-10 relative">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3
+                                    class="text-white text-lg font-bold flex items-center gap-2"
                                 >
-                                {{ $t('about.techStack') }}
-                            </h3>
+                                    <span
+                                        class="material-symbols-outlined text-primary"
+                                        >extension</span
+                                    >
+                                    {{ $t('about.techStack') }}
+                                </h3>
+                                <AdminOnly>
+                                    <button
+                                        @click="handleEditTechStack"
+                                        class="flex items-center gap-2 px-3 py-1.5 rounded text-sm font-mono transition-colors bg-console-bg border border-console-border text-gray-400 hover:border-primary hover:text-primary"
+                                        title="Editar tech stack"
+                                    >
+                                        <span
+                                            class="material-symbols-outlined text-[16px]"
+                                            >edit</span
+                                        >
+                                        Editar
+                                    </button>
+                                </AdminOnly>
+                            </div>
                             <div
-                                class="bg-[#161e27] border border-[#293038] rounded-lg p-6"
+                                class="bg-[#161e27] border border-[#293038] rounded-lg px-6 pt-4 pb-6"
                             >
                                 <div
-                                    v-for="(category, categoryKey) in techStack"
+                                    v-for="(
+                                        category, categoryKey, index
+                                    ) in techStack"
                                     :key="categoryKey"
-                                    :class="{ 'mt-6': categoryKey !== 'core' }"
+                                    :class="index > 0 ? 'mt-8' : ''"
                                 >
                                     <p
                                         class="text-[#9dabb8] text-xs uppercase font-bold tracking-wider mb-4"
@@ -333,6 +350,13 @@
             @close="showEditSkillsModal = false"
             @saved="handleSkillsSaved"
         />
+
+        <EditTechStackModal
+            :is-open="showEditTechStackModal"
+            :initial-tech-stack="techStack"
+            @close="showEditTechStackModal = false"
+            @saved="handleTechStackSaved"
+        />
     </div>
 </template>
 
@@ -342,6 +366,7 @@ import { useI18n } from 'vue-i18n';
 import Sidebar from '../components/Sidebar.vue';
 import EditAboutModal from '../components/EditAboutModal.vue';
 import EditSkillsModal from '../components/EditSkillsModal.vue';
+import EditTechStackModal from '../components/EditTechStackModal.vue';
 import AdminOnly from '../components/AdminOnly.vue';
 import {
     getContactInfo,
@@ -352,6 +377,7 @@ import {
 import {
     getAboutMe,
     getSkills as getFirestoreSkills,
+    getTechStack as getFirestoreTechStack,
 } from '../data/firestore.js';
 import { useAdmin } from '../composables/useAuth.js';
 
@@ -359,6 +385,7 @@ const { t, locale } = useI18n();
 const { isAdmin } = useAdmin();
 const showEditAboutModal = ref(false);
 const showEditSkillsModal = ref(false);
+const showEditTechStackModal = ref(false);
 
 const activeTab = ref('about');
 
@@ -571,13 +598,44 @@ const handleEditClick = () => {
     }
 };
 
+const handleEditTechStack = () => {
+    showEditTechStackModal.value = true;
+};
+
+const handleTechStackSaved = () => {
+    // Recargar tech stack después de guardar
+    loadTechStackData();
+};
+
+// Cargar tech stack desde Firestore con fallback a static
+const loadTechStackData = async () => {
+    try {
+        // Intentar cargar desde Firestore
+        const firestoreTechStack = await getFirestoreTechStack();
+        if (firestoreTechStack) {
+            techStack.value = firestoreTechStack;
+            return;
+        }
+    } catch (err) {
+        console.warn(
+            'Error loading tech stack from Firestore, using static data:',
+            err,
+        );
+    }
+
+    // Fallback a datos estáticos
+    const staticTechStack = await getTechStack();
+    if (staticTechStack) {
+        techStack.value = staticTechStack;
+    }
+};
+
 onMounted(async () => {
     // Cargar datos de About
     await loadAboutMeData();
 
-    // Cargar tech stack (no se edita por ahora)
-    const tech = await getTechStack();
-    if (tech) techStack.value = tech;
+    // Cargar tech stack desde Firestore
+    await loadTechStackData();
 
     // Cargar skills
     await loadSkillsData();
