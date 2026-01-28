@@ -17,32 +17,62 @@ select {
 }
 
 /* Code editor-style JSON viewer (skills.json) */
+.json-viewer {
+  padding-left: 0;
+}
+
 .code-line {
   display: block;
   position: relative;
-  padding-left: 3rem;
+  padding-left: 3.5rem;
+  min-height: 1.5em;
+}
+
+@media (min-width: 768px) {
+  .code-line {
+    padding-left: 3rem;
+  }
+  
+  .code-line::before {
+    left: 0;
+  }
 }
 
 .code-line::before {
   counter-increment: line;
   content: counter(line);
   position: absolute;
-  left: 0;
+  left: 0.5rem;
   width: 2.5rem;
   text-align: right;
   color: #4b5563; /* gray-600 */
+  font-size: 0.875rem;
+  user-select: none;
 }
 
+/* JSON Syntax Highlighting */
 .json-key {
-  color: #e06c75;
+  color: #e06c75; /* Red - keys */
 }
 
 .json-string {
-  color: #98c379;
+  color: #98c379; /* Green - strings */
+}
+
+.json-number {
+  color: #d19a66; /* Orange - numbers */
+}
+
+.json-boolean {
+  color: #c678dd; /* Purple - booleans */
+}
+
+.json-null {
+  color: #5c6370; /* Gray - null */
 }
 
 .json-punct {
-  color: #abb2bf;
+  color: #abb2bf; /* Light gray - punctuation */
 }
 
 /* Syntax highlighting for project detail */
