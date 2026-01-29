@@ -61,6 +61,8 @@ export default {
     },
     footer: {
         copyright: '© 2026 Pablo Pan Portfolio. Built with Tailwind CSS.',
+        localStorageNotice:
+            'Usamos almacenamiento local para recordar tu idioma.',
         online: 'Online',
         encoding: 'UTF-8',
         locale: 'es_ES',
