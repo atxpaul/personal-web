@@ -9,6 +9,8 @@ export default {
         logout: './logout.sh',
     },
     about: {
+        files: 'Profile files',
+        seeProjects: 'See what I\'ve built',
         whoami: 'whoami',
         intro: 'DevOps Engineer specialized in automation, cloud, and scalability. I build bridges between code and operations.',
         description1:
@@ -57,6 +59,11 @@ export default {
         contact: './contact_me.sh',
     },
     projects: {
+        openDetail: 'cat project.yml',
+        colName: 'Name',
+        colStack: 'Stack',
+        colModified: 'Modified',
+        results: 'Results',
         latestDeployment: 'Latest Deployment',
         subtitleDefault:
             'Exploring infrastructure as code, container orchestration, and automation pipelines.',
@@ -79,6 +86,7 @@ export default {
         close: 'Close',
     },
     blog: {
+        lead: 'Technical notes on infrastructure, CI/CD and running things in the cloud.',
         comingSoon: 'No posts yet. Technical write-ups are on the way.',
     },
     notFound: {
@@ -94,10 +102,12 @@ export default {
         loading: 'Signing in...',
     },
     header: {
+        nav: 'Main navigation',
         language: 'Language',
         menu: 'Toggle navigation',
     },
     footer: {
+        social: 'Social profiles',
         copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
         localStorageNotice:
             'We use local storage to remember your language preference.',
@@ -111,5 +121,15 @@ export default {
         gitlab: 'GitLab',
         stackoverflow: 'StackOverflow',
         linkedin: 'LinkedIn',
+    },
+    home: {
+        summary: 'Profile summary',
+        fetch: {
+            role: 'role',
+            location: 'location',
+            status: 'status',
+            contact: 'contact',
+            stack: 'stack',
+        },
     },
 };

@@ -11,7 +11,7 @@ export function formatRelativeDate(dateString, locale) {
     const absDays = Math.abs(diffDays);
     const rtf = new Intl.RelativeTimeFormat(locale, {
         numeric: 'auto',
-        style: 'short',
+        style: 'long',
     });
 
     if (absDays < 7) return rtf.format(diffDays, 'day');

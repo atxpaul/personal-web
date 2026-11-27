@@ -1,55 +1,88 @@
 <template>
-  <article v-if="project" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch rounded-xl bg-console-bg border border-console-border p-1 overflow-hidden">
-    <div class="relative w-full h-64 md:h-auto overflow-hidden rounded-lg bg-[#0d1117] border border-console-border/50" aria-hidden="true">
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#0d1117] to-[#0d1117]"></div>
+  <article
+    v-if="project"
+    class="pane overflow-hidden grid grid-cols-1 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+  >
+    <!-- Visual: la imagen del proyecto, entonada al azul del sistema -->
+    <div
+      class="relative min-h-[13rem] md:min-h-full overflow-hidden border-b md:border-b-0 md:border-r border-console-border bg-console-raised"
+    >
       <div
         v-if="project.image"
-        class="relative w-full h-full bg-cover bg-center opacity-80"
+        aria-hidden="true"
+        class="absolute inset-0 bg-cover bg-center grayscale contrast-125 opacity-60"
         :style="{ backgroundImage: `url('${project.image}')` }"
       ></div>
+      <div class="absolute inset-0 bg-primary/25 mix-blend-color" aria-hidden="true"></div>
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-console-bg via-console-bg/30 to-transparent"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="absolute left-5 right-5 bottom-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs"
+      >
+        <span v-if="project.status" class="flex items-center gap-2 text-prompt">
+          <span class="w-1.5 h-1.5 rounded-full bg-prompt live-dot" aria-hidden="true"></span>
+          {{ project.status }}
+        </span>
+        <span v-if="project.provider || project.tag" class="text-console-text">
+          {{ project.provider || project.tag }}
+        </span>
+      </div>
     </div>
 
-    <div class="flex flex-col justify-center p-6 gap-4 min-w-0">
-      <div v-if="project.tag || project.provider" class="flex items-center gap-2 text-xs font-mono text-primary bg-primary/10 w-fit max-w-full px-2 py-1 rounded">
-        <span aria-hidden="true" class="material-symbols-outlined text-sm">cloud_queue</span>
-        <span class="truncate">{{ project.tag || project.provider }}</span>
-      </div>
+    <div class="flex flex-col gap-5 p-6 md:p-8 lg:p-10 min-w-0">
+      <p class="font-mono text-xs text-console-muted truncate">
+        ~/projects/{{ project.id }}
+      </p>
 
-      <h3 class="text-2xl font-bold text-white [overflow-wrap:anywhere]">
+      <h3
+        class="font-display text-2xl md:text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] text-white [overflow-wrap:anywhere]"
+      >
         <router-link
           v-if="project.id"
           :to="`/projects/${project.id}`"
-          class="hover:text-primary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
+          class="hover:text-primary transition-colors rounded-sm"
         >
           {{ project.title }}
         </router-link>
         <template v-else>{{ project.title }}</template>
       </h3>
 
-      <p class="text-gray-400 text-sm leading-relaxed [overflow-wrap:anywhere]">
+      <p
+        v-if="project.description"
+        class="text-console-text/85 leading-relaxed max-w-[60ch] [overflow-wrap:anywhere]"
+      >
         {{ project.description }}
       </p>
 
-      <div v-if="project.technologies?.length" class="flex flex-wrap gap-2 mt-2">
-        <span
-          v-for="tech in project.technologies"
-          :key="tech"
-          class="text-xs border border-console-border bg-[#161b22] text-gray-400 px-2 py-1 rounded"
-        >
-          {{ tech }}
+      <div v-if="project.technologies?.length" class="flex flex-wrap gap-1.5">
+        <span v-for="tech in project.technologies" :key="tech" class="flag">
+          --{{ tech.toLowerCase().replace(/\s+/g, '-') }}
         </span>
       </div>
 
-      <div v-if="project.github" class="pt-4">
+      <div class="flex flex-wrap items-center gap-3 pt-2 mt-auto">
+        <router-link
+          v-if="project.id"
+          :to="`/projects/${project.id}`"
+          class="btn btn-primary"
+        >
+          <span aria-hidden="true" class="material-symbols-outlined text-[18px]">description</span>
+          <span>{{ $t('projects.openDetail') }}</span>
+        </router-link>
         <a
+          v-if="project.github"
           :href="project.github"
           target="_blank"
           rel="noopener noreferrer"
-          class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded transition-colors flex justify-center items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          class="btn btn-ghost"
         >
           <span aria-hidden="true" class="material-symbols-outlined text-[18px]">code</span>
           <span>{{ $t('projects.viewCode') }}</span>
         </a>
+        <slot name="actions" />
       </div>
     </div>
   </article>

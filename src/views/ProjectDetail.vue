@@ -1,82 +1,128 @@
 <template>
-    <main
-        class="flex-grow flex flex-col items-center py-8 px-4 md:px-10 lg:px-20"
-    >
-        <!-- Breadcrumb -->
-        <nav
-            class="w-full max-w-6xl mb-6 flex items-center gap-2 font-mono text-sm text-gray-500 min-w-0"
-            aria-label="Breadcrumb"
-        >
-            <router-link
-                to="/projects"
-                class="hover:text-primary transition-colors flex items-center gap-1 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    <main class="flex-grow py-8 md:py-12">
+        <div class="page">
+            <!-- Breadcrumb -->
+            <nav
+                class="mb-8 flex items-center gap-2 font-mono text-sm text-console-muted min-w-0"
+                aria-label="Breadcrumb"
             >
-                <span aria-hidden="true" class="material-symbols-outlined text-base"
-                    >arrow_back</span
+                <router-link
+                    to="/projects"
+                    class="hover:text-primary transition-colors flex items-center gap-1 rounded-sm"
                 >
-                cd ..
-            </router-link>
-            <span aria-hidden="true">/</span>
-            <span class="text-white truncate min-w-0">{{ route.params.id }}.yml</span>
-        </nav>
-
-        <!-- Project Detail Card -->
-        <div
-            v-if="project"
-            class="w-full max-w-6xl bg-console-bg border border-console-border rounded-lg shadow-2xl overflow-hidden flex flex-col mb-16 relative group"
-        >
-            <!-- Header -->
-            <div
-                class="bg-[#161b22] border-b border-console-border flex items-center justify-between px-4 py-2 select-none"
-            >
-                <div class="flex items-center gap-2">
-                    <div class="flex gap-1.5 mr-4">
-                        <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
-                    </div>
-                    <div
-                        class="flex items-center bg-console-bg border-t border-x border-console-border rounded-t px-3 py-1 text-xs text-gray-300 font-mono relative top-[5px]"
+                    <span aria-hidden="true" class="material-symbols-outlined text-base"
+                        >arrow_back</span
                     >
-                        <span
-                            aria-hidden="true"
-                            class="material-symbols-outlined text-[14px] mr-2 text-yellow-500"
-                            >description</span
-                        >
-                        project_detail.yml
-                        <router-link
-                            to="/projects"
-                            class="ml-2 flex items-center hover:text-white rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-                            :aria-label="$t('common.close')"
+                    cd ..
+                </router-link>
+                <span aria-hidden="true">/</span>
+                <span class="text-white truncate min-w-0">{{ route.params.id }}.yml</span>
+            </nav>
+
+            <template v-if="project">
+                <!-- Cabecera del proyecto -->
+                <header class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                    <div class="min-w-0">
+                        <div
+                            class="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs text-console-muted"
                         >
                             <span
-                                aria-hidden="true"
-                                class="material-symbols-outlined text-[14px]"
-                                >close</span
+                                v-if="project.status"
+                                class="flex items-center gap-2"
+                                :class="isDeployed ? 'text-prompt' : 'text-[#ffbd2e]'"
                             >
-                        </router-link>
+                                <span
+                                    class="w-1.5 h-1.5 rounded-full"
+                                    :class="isDeployed ? 'bg-prompt live-dot' : 'bg-[#ffbd2e]'"
+                                ></span>
+                                {{ project.status }}
+                            </span>
+                            <span v-if="project.providerFull || project.provider">{{
+                                project.providerFull || project.provider
+                            }}</span>
+                            <span>v{{ project.version || '1.0.0' }}</span>
+                            <time v-if="project.updatedAt" :datetime="project.updatedAt">{{
+                                formatDate(project.updatedAt)
+                            }}</time>
+                        </div>
+                        <h1
+                            class="mt-4 font-display text-4xl md:text-6xl font-bold leading-[1.02] tracking-[-0.035em] text-white [overflow-wrap:anywhere]"
+                        >
+                            {{ project.title }}
+                        </h1>
+                        <p
+                            v-if="project.description"
+                            class="mt-5 max-w-[62ch] font-display text-lg md:text-xl leading-relaxed text-console-text"
+                        >
+                            {{ project.description }}
+                        </p>
                     </div>
-                </div>
-                <div class="text-xs font-mono text-gray-500">vim</div>
-            </div>
+                    <div v-if="project.github" class="flex flex-wrap gap-3">
+                        <a
+                            :href="project.github"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-primary"
+                        >
+                            <span aria-hidden="true" class="material-symbols-outlined text-[18px]"
+                                >code</span
+                            >
+                            {{ $t('projects.viewCode') }}
+                        </a>
+                    </div>
+                </header>
 
-            <!-- Content -->
-            <div
-                class="flex flex-col md:flex-row overflow-x-auto min-h-[600px] relative"
-            >
-                <!-- Line Numbers -->
+                <!-- Ventana del editor con el manifiesto del proyecto -->
                 <div
-                    class="hidden md:flex flex-col items-end px-3 py-6 bg-console-bg border-r border-console-border text-gray-600 font-mono text-sm leading-6 select-none min-w-[3rem]"
+                    class="bg-console-bg border border-console-border rounded-xl shadow-[0_25px_50px_-12px_rgb(0_0_0_/_0.5)] overflow-hidden flex flex-col mb-20"
                 >
-                    <span v-for="n in 40" :key="n">{{ n }}</span>
-                </div>
+                    <div
+                        class="bg-console-raised border-b border-console-border flex items-center justify-between px-4 h-11 select-none"
+                    >
+                        <div class="flex items-center gap-4 h-full min-w-0">
+                            <div class="flex gap-2 shrink-0" aria-hidden="true">
+                                <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                                <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                                <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                            </div>
+                            <div
+                                class="flex items-center gap-2 h-full px-3 bg-console-bg border-x border-console-border font-mono text-xs text-console-text min-w-0 relative top-px"
+                            >
+                                <span
+                                    aria-hidden="true"
+                                    class="material-symbols-outlined text-[14px] text-[#ffbd2e]"
+                                    >description</span
+                                >
+                                <span class="truncate">{{ project.id }}.yml</span>
+                                <router-link
+                                    to="/projects"
+                                    class="ml-1 flex items-center text-console-muted hover:text-white rounded-sm"
+                                    :aria-label="$t('common.close')"
+                                >
+                                    <span aria-hidden="true" class="material-symbols-outlined text-[14px]"
+                                        >close</span
+                                    >
+                                </router-link>
+                            </div>
+                        </div>
+                        <div class="font-mono text-xs text-console-muted shrink-0">vim</div>
+                    </div>
 
-                <!-- Code Content -->
-                <div
-                    class="flex-1 p-4 md:p-6 font-mono text-sm md:text-base leading-6 text-gray-300 overflow-x-auto"
-                >
-                    <div class="space-y-1">
-                        <div><span class="text-gray-500">---</span></div>
+                    <div class="flex overflow-x-auto relative">
+                        <!-- Números de línea: tantos como líneas visuales tiene el contenido -->
+                        <div
+                            class="hidden md:flex flex-col items-end shrink-0 px-4 py-6 border-r border-console-border font-mono text-sm leading-6 text-[#6e7681] select-none tabular"
+                            aria-hidden="true"
+                        >
+                            <span v-for="n in lineCount" :key="n">{{ n }}</span>
+                        </div>
+
+                        <div
+                            ref="codeEl"
+                            class="flex-1 min-w-0 px-5 py-6 md:px-8 font-mono text-sm leading-6 text-console-text overflow-x-auto"
+                        >
+                    <div>
+                        <div><span class="text-console-muted">---</span></div>
                         <div>
                             <span class="text-syntax-key">project</span>:
                             <span class="text-secondary"
@@ -110,32 +156,32 @@
                                 }}"</span
                             >
                         </div>
-                        <div class="h-4"></div>
+                        <div class="h-6" aria-hidden="true"></div>
 
                         <div>
                             <span class="text-syntax-key">summary</span>:
                             <span class="text-syntax-string">|</span>
                         </div>
                         <div
-                            class="pl-4 text-gray-400 border-l-2 border-console-border ml-1 mb-2 whitespace-pre-line"
+                            class="pl-4 text-console-text/80 border-l-2 border-console-border ml-1 whitespace-pre-line"
                         >
                             {{ project.summary || project.description }}
                         </div>
 
-                        <div class="h-4"></div>
+                        <div class="h-6" aria-hidden="true"></div>
 
                         <div>
                             <span class="text-syntax-key">tech_stack</span>:
                         </div>
                         <div
-                            class="pl-4 grid grid-cols-1 md:grid-cols-2 gap-2 mt-2 max-w-2xl"
+                            class="pl-4"
                         >
                             <div
                                 v-for="tech in techStackList"
                                 :key="tech.name"
-                                class="flex items-center gap-2 group hover:bg-[#161b22] p-1 rounded transition-colors cursor-default"
+                                class="flex items-center gap-2 group h-6"
                             >
-                                <span class="text-gray-500">-</span>
+                                <span class="text-console-muted">-</span>
                                 <span
                                     aria-hidden="true"
                                     class="material-symbols-outlined text-[16px] text-primary"
@@ -153,7 +199,7 @@
                             </div>
                         </div>
 
-                        <div v-if="project.architecture" class="h-4"></div>
+                        <div v-if="project.architecture" class="h-6"></div>
 
                         <div v-if="project.architecture">
                             <span class="text-syntax-key">architecture</span>:
@@ -161,7 +207,7 @@
                         </div>
                         <div
                             v-if="project.architecture"
-                            class="pl-4 mt-2 overflow-x-auto pb-4"
+                            class="pl-4 py-2 overflow-x-auto"
                         >
                             <pre
                                 class="architecture-diagram text-blue-400 select-none m-0 p-0"
@@ -169,16 +215,16 @@
                             >
                         </div>
 
-                        <div class="h-4"></div>
+                        <div class="h-6" aria-hidden="true"></div>
 
                         <div> <span class="text-syntax-key">links</span>: </div>
-                        <div class="pl-4 mt-2 flex flex-wrap gap-4">
+                        <div class="pl-4 h-12 flex flex-wrap items-center gap-4">
                             <a
                                 v-if="project.github"
                                 :href="project.github"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="group relative inline-flex items-center gap-2 px-4 py-2 bg-[#161b22] border border-console-border rounded hover:border-primary hover:text-white text-gray-300 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                class="group relative inline-flex items-center gap-2 px-4 py-2 bg-console-raised border border-console-border rounded-md hover:border-primary hover:text-white text-console-text transition-colors"
                             >
                                 <span
                                     class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity rounded"
@@ -192,151 +238,93 @@
                             </a>
                         </div>
 
-                        <div class="h-4"></div>
+                        <div class="h-6" aria-hidden="true"></div>
                         <div class="blinking-cursor text-primary"
-                            >$ <span class="text-gray-500">_</span></div
+                            >$ <span class="text-console-muted">_</span></div
                         >
                     </div>
-                </div>
-            </div>
-
-            <!-- Footer Status Bar -->
-            <div
-                class="bg-primary text-white text-xs font-mono py-1 px-4 flex justify-between items-center z-10"
-            >
-                <div class="flex gap-4 font-bold">
-                    <span>NORMAL</span>
-                    <span class="font-normal text-white/80"
-                        >{{ project.id }}.yml</span
-                    >
-                </div>
-                <div class="flex gap-4">
-                    <span>utf-8</span>
-                    <span>yaml</span>
-                    <span>100%</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        <p
-            v-if="loading && !project"
-            role="status"
-            class="w-full max-w-6xl font-mono text-sm text-gray-500 text-center py-12"
-        >
-            {{ $t('projects.loadingProject') }}
-        </p>
-
-        <!-- Not found / error: salida de terminal con salida clara -->
-        <div
-            v-else-if="error"
-            role="alert"
-            class="w-full max-w-6xl bg-console-bg border border-console-border rounded-xl p-6 md:p-8 mb-16 font-mono text-sm"
-        >
-            <p class="flex flex-wrap gap-x-2">
-                <span class="text-green-400">pablo@portfolio:~$</span>
-                <span class="text-white break-all">cat ./projects/{{ route.params.id }}.yml</span>
-            </p>
-            <p class="mt-3 text-red-400">
-                {{ error === 'not-found' ? $t('projects.notFound') : $t('projects.loadError') }}
-            </p>
-            <div class="mt-6 flex flex-wrap gap-4">
-                <router-link
-                    to="/projects"
-                    class="bg-primary text-white hover:bg-primary/90 px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                    <span aria-hidden="true" class="material-symbols-outlined text-sm">folder_open</span>
-                    <span>{{ $t('nav.projects') }}</span>
-                </router-link>
-                <button
-                    v-if="error !== 'not-found'"
-                    type="button"
-                    class="border border-console-border hover:border-primary text-gray-300 hover:text-white bg-[#21262d] px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                    @click="loadProjectData(route.params.id)"
-                >
-                    <span aria-hidden="true" class="material-symbols-outlined text-sm">refresh</span>
-                    <span>{{ $t('common.retry') }}</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Related Projects -->
-        <div v-if="relatedProjects.length > 0" class="w-full max-w-6xl">
-            <div
-                class="flex items-center gap-3 mb-6 border-b border-console-border pb-2"
-            >
-                <span aria-hidden="true" class="material-symbols-outlined text-primary"
-                    >history</span
-                >
-                <h2 class="text-xl font-bold text-white font-mono">{{
-                    $t('projects.relatedLogs')
-                }}</h2>
-                <span class="text-gray-600 font-mono text-sm ml-auto"
-                    >ls -t | head -n {{ relatedProjects.length }}</span
-                >
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div
-                    v-for="related in relatedProjects"
-                    :key="related.id"
-                    class="group relative bg-console-bg border border-console-border rounded-xl p-5 hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(25,127,230,0.1)] flex flex-col h-full"
-                >
-                    <div class="flex items-start justify-between mb-4">
-                        <div
-                            class="p-2 bg-[#161b22] rounded-lg border border-console-border group-hover:border-primary/30 text-white"
-                        >
-                            <span aria-hidden="true" class="material-symbols-outlined">{{
-                                related.icon || 'folder'
-                            }}</span>
                         </div>
-                        <time
-                            v-if="related.updatedAt"
-                            :datetime="related.updatedAt"
-                            class="text-xs font-mono text-gray-500"
-                            >{{ formatDate(related.updatedAt) }}</time
-                        >
                     </div>
-                    <h3
-                        class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors font-mono [overflow-wrap:anywhere]"
+
+                    <!-- Barra de estado de vim -->
+                    <div
+                        class="bg-console-raised border-t border-console-border font-mono text-xs flex justify-between items-stretch h-7"
                     >
-                        <router-link
-                            :to="`/projects/${related.id}`"
-                            class="rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                            >{{ related.title }}</router-link
-                        >
-                    </h3>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow [overflow-wrap:anywhere]">
-                        {{ related.description }}
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span
-                            v-for="tech in related.technologies?.slice(0, 3)"
-                            :key="tech"
-                            class="text-[10px] px-1.5 py-0.5 rounded bg-[#161b22] border border-console-border text-gray-300 font-mono"
-                        >
-                            {{ tech }}
-                        </span>
+                        <div class="flex items-stretch gap-4 min-w-0">
+                            <span class="bg-primary text-white font-bold px-3 flex items-center">NORMAL</span>
+                            <span class="flex items-center text-console-muted truncate">{{ project.id }}.yml</span>
+                        </div>
+                        <div class="flex items-center gap-4 px-4 text-console-muted">
+                            <span>utf-8</span>
+                            <span class="hidden sm:inline">yaml</span>
+                            <span class="tabular">{{ lineCount }}L</span>
+                        </div>
                     </div>
-                    <a
-                        v-if="related.github"
-                        :href="related.github"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="w-fit text-sm font-medium text-primary flex items-center gap-1 hover:underline underline-offset-4 font-mono rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                </div>
+            </template>
+
+            <!-- Loading State -->
+            <p
+                v-if="loading && !project"
+                role="status"
+                class="pane font-mono text-sm text-console-muted text-center py-16"
+            >
+                {{ $t('projects.loadingProject') }}<span class="cursor-blink">_</span>
+            </p>
+
+            <!-- Not found / error: salida de terminal con salida clara -->
+            <div
+                v-else-if="error"
+                role="alert"
+                class="pane p-6 md:p-8 mb-16 font-mono text-sm"
+            >
+                <p class="flex flex-wrap gap-x-2">
+                    <span class="text-prompt">pablo@portfolio:~$</span>
+                    <span class="text-white break-all">cat ./projects/{{ route.params.id }}.yml</span>
+                </p>
+                <p class="mt-3 text-red-400">
+                    {{ error === 'not-found' ? $t('projects.notFound') : $t('projects.loadError') }}
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <router-link to="/projects" class="btn btn-primary">
+                        <span aria-hidden="true" class="material-symbols-outlined text-[18px]">folder_open</span>
+                        <span>{{ $t('nav.projects') }}</span>
+                    </router-link>
+                    <button
+                        v-if="error !== 'not-found'"
+                        type="button"
+                        class="btn btn-ghost"
+                        @click="loadProjectData(route.params.id)"
                     >
-                        cd ./repo
-                        <span aria-hidden="true" class="material-symbols-outlined text-[16px]"
-                            >arrow_forward</span
-                        >
-                    </a>
+                        <span aria-hidden="true" class="material-symbols-outlined text-[18px]">refresh</span>
+                        <span>{{ $t('common.retry') }}</span>
+                    </button>
                 </div>
             </div>
+
+            <!-- Related Projects -->
+            <section v-if="relatedProjects.length > 0" aria-labelledby="related-title">
+                <div class="flex flex-wrap items-baseline justify-between gap-3 mb-5">
+                    <h2
+                        id="related-title"
+                        class="flex items-baseline gap-3 font-display text-xl md:text-2xl font-bold tracking-[-0.02em] text-white"
+                    >
+                        <span class="font-mono text-primary text-lg" aria-hidden="true">&gt;&gt;</span>
+                        {{ $t('projects.relatedLogs') }}
+                    </h2>
+                    <span class="font-mono text-xs text-console-muted"
+                        >ls -t | head -n {{ relatedProjects.length }}</span
+                    >
+                </div>
+                <ProjectList :projects="relatedProjects" :format-date="formatDate" />
+            </section>
         </div>
     </main>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue';
+import ProjectList from '../components/ProjectList.vue';
 import { useRoute } from 'vue-router';
 import { formatRelativeDate } from '../utils/relativeTime.js';
 import { useI18n } from 'vue-i18n';
@@ -452,6 +440,33 @@ const architectureText = computed(() => {
     // Preservar exactamente el formato ASCII
     return project.value.architecture;
 });
+
+const isDeployed = computed(() => project.value?.status === 'DEPLOYED');
+
+// Números de línea reales: altura del contenido / altura de línea (24px)
+const codeEl = ref(null);
+const lineCount = ref(1);
+let resizeObserver = null;
+
+const measureLines = () => {
+    if (!codeEl.value) return;
+    const style = getComputedStyle(codeEl.value);
+    const inner =
+        codeEl.value.clientHeight -
+        parseFloat(style.paddingTop) -
+        parseFloat(style.paddingBottom);
+    lineCount.value = Math.max(1, Math.round(inner / 24));
+};
+
+watch(codeEl, (el) => {
+    resizeObserver?.disconnect();
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    resizeObserver = new ResizeObserver(measureLines);
+    resizeObserver.observe(el);
+    nextTick(measureLines);
+});
+
+onBeforeUnmount(() => resizeObserver?.disconnect());
 
 const formatDate = (dateString) =>
     formatRelativeDate(dateString, locale.value);

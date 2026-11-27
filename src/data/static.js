@@ -49,7 +49,7 @@ export const getContactInfo = async () => {
     // En producción: return await fetch('/api/contact').then(r => r.json())
 
     return {
-        email: 'dev@root.sh',
+        email: '', // dev@root.sh era un placeholder: no se muestra hasta que haya uno real
         location: 'Remote / Salamanca',
         status: 'Open for hire',
     };
