@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "material symbols outlined",
+        "createdAt": "2026-11-27T22:30:03.413Z",
+        "reason": "Claude triage: icon font (Material Symbols) used site-wide for icons since before this session, not a text typeface"
+      }
+    ]
+  }
+}

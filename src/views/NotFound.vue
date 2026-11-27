@@ -1,24 +1,24 @@
 <template>
     <div
-        class="flex-grow flex flex-col items-center justify-center px-4 py-8 md:px-8"
+        class="flex-grow flex flex-col items-center justify-center px-4 py-12 md:px-8"
     >
         <section
-            class="w-full max-w-3xl bg-console-bg border border-console-border rounded-xl shadow-2xl overflow-hidden font-mono text-sm md:text-base"
+            class="w-full max-w-3xl bg-console-bg border border-console-border rounded-xl shadow-[0_25px_50px_-12px_rgb(0_0_0_/_0.5)] overflow-hidden font-mono text-sm"
             aria-labelledby="not-found-title"
         >
             <div
-                class="bg-[#161b22] px-4 py-3 border-b border-console-border flex items-center gap-2"
+                class="bg-console-raised px-4 h-11 border-b border-console-border flex items-center gap-2"
                 aria-hidden="true"
             >
                 <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
                 <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
                 <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
-                <span class="ml-4 text-xs text-gray-500">pablo@portfolio:~</span>
+                <span class="ml-4 text-xs text-console-muted">pablo@portfolio:~</span>
             </div>
 
-            <div class="p-6 md:p-8 space-y-4">
+            <div class="p-6 md:p-10 space-y-5">
                 <p class="flex flex-col md:flex-row md:items-center gap-2">
-                    <span class="text-green-400 whitespace-nowrap"
+                    <span class="text-prompt whitespace-nowrap"
                         >pablo@portfolio:~$</span
                     >
                     <span class="text-white break-all">cd {{ path }}</span>
@@ -26,34 +26,34 @@
 
                 <h1
                     id="not-found-title"
-                    class="text-red-400 break-all"
+                    class="font-display text-2xl md:text-4xl font-bold tracking-[-0.02em] text-red-400 [overflow-wrap:anywhere] leading-tight"
                 >
                     bash: cd: {{ path }}: {{ $t('notFound.title') }}
                 </h1>
 
-                <p class="text-gray-400 leading-relaxed max-w-2xl">
+                <p class="font-display text-lg text-console-text leading-relaxed max-w-[60ch]">
                     {{ $t('notFound.body') }}
                 </p>
 
-                <div class="flex flex-wrap gap-4 pt-2">
+                <div class="flex flex-wrap gap-3 pt-4">
                     <router-link
                         to="/"
-                        class="bg-primary text-white hover:bg-primary/90 px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                        class="btn btn-primary"
                     >
                         <span
                             aria-hidden="true"
-                            class="material-symbols-outlined text-sm"
+                            class="material-symbols-outlined text-[18px]"
                             >home</span
                         >
                         <span>{{ $t('notFound.home') }}</span>
                     </router-link>
                     <router-link
                         to="/projects"
-                        class="border border-console-border hover:border-primary text-gray-300 hover:text-white bg-[#21262d] px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                        class="btn btn-ghost"
                     >
                         <span
                             aria-hidden="true"
-                            class="material-symbols-outlined text-sm"
+                            class="material-symbols-outlined text-[18px]"
                             >folder_open</span
                         >
                         <span>{{ $t('notFound.projects') }}</span>
@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="flex items-center gap-2 pt-2" aria-hidden="true">
-                    <span class="text-green-400">pablo@portfolio:~$</span>
-                    <div class="w-3 h-5 bg-primary cursor-blink"></div>
+                    <span class="text-prompt">pablo@portfolio:~$</span>
+                    <div class="w-2.5 h-5 bg-primary cursor-blink"></div>
                 </div>
             </div>
         </section>

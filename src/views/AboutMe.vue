@@ -1,276 +1,104 @@
 <template>
-    <div class="flex flex-1 overflow-hidden">
-        <Sidebar />
-
-        <!-- Main Content Area: Code Editor View -->
-        <main
-            class="flex-1 flex flex-col bg-[#111418] overflow-hidden relative"
-        >
-            <!-- Botón de edición para admin (cambia según la pestaña activa) -->
-            <AdminOnly>
-                <button
-                    @click="handleEditClick"
-                    class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-3 px-4 rounded-lg transition-colors flex items-center gap-2 shadow-lg z-50"
-                >
-                    <span aria-hidden="true" class="material-symbols-outlined text-lg">edit</span>
-                    <span>Editar</span>
-                </button>
-            </AdminOnly>
-            <!-- Tab Bar (Simulated) -->
-            <div
-                class="flex h-9 bg-[#111418] border-b border-[#293038] overflow-x-auto"
-                role="tablist"
+    <div class="flex-grow py-10 md:py-14">
+        <!-- Botón de edición para admin (cambia según la pestaña activa) -->
+        <AdminOnly>
+            <button
+                type="button"
+                @click="handleEditClick"
+                class="btn btn-primary fixed bottom-6 right-6 h-12 shadow-lg z-50"
             >
-                <button
-                    type="button"
-                    role="tab"
-                    :aria-selected="activeTab === 'about'"
-                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px] shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
-                    :class="
-                        activeTab === 'about'
-                            ? 'border-t-2 border-b border-t-primary border-b-[#111418] border-r-[#293038] bg-[#111418] text-white'
-                            : 'border-b border-b-[#293038] border-r-[#293038] bg-[#161e27] text-[#9dabb8] hover:bg-[#1c242e]'
-                    "
-                    @click="activeTab = 'about'"
-                >
-                    <span
-                        aria-hidden="true"
-                        class="material-symbols-outlined text-base text-[#42a5f5]"
-                        >description</span
-                    >
-                    <span>about-me.md</span>
-                    <span
-                        aria-hidden="true"
-                        class="material-symbols-outlined text-sm ml-auto text-[#9dabb8] hover:text-white"
-                        >close</span
-                    >
-                </button>
-                <button
-                    type="button"
-                    role="tab"
-                    :aria-selected="activeTab === 'skills'"
-                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px] shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
-                    :class="
-                        activeTab === 'skills'
-                            ? 'border-t-2 border-b border-t-primary border-b-[#111418] border-r-[#293038] bg-[#111418] text-white'
-                            : 'border-b border-b-[#293038] border-r-[#293038] bg-[#161e27] text-[#9dabb8] hover:bg-[#1c242e]'
-                    "
-                    @click="activeTab = 'skills'"
-                >
-                    <span
-                        aria-hidden="true"
-                        class="material-symbols-outlined text-base text-[#fbc02d]"
-                        >data_object</span
-                    >
-                    <span>skills.json</span>
-                    <span
-                        aria-hidden="true"
-                        class="material-symbols-outlined text-sm ml-auto text-[#9dabb8] hover:text-white"
-                        >close</span
-                    >
-                </button>
-            </div>
+                <span aria-hidden="true" class="material-symbols-outlined text-lg">edit</span>
+                <span>Editar</span>
+            </button>
+        </AdminOnly>
 
-            <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-4 md:pl-4 md:pr-8">
-                <div class="max-w-4xl md:ml-0">
-                    <!-- ABOUT TAB -->
-                    <div v-if="activeTab === 'about'">
-                        <!-- Page Heading Component -->
-                        <div class="mb-8 animate-fade-in">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-primary text-xl font-bold"
-                                    >$</span
-                                >
-                                <h1
-                                    class="text-white text-4xl md:text-5xl font-bold tracking-[-0.033em]"
-                                >
-                                    {{ $t('about.whoami') }}
-                                </h1>
-                                <span
-                                    class="w-3 h-8 bg-primary animate-pulse ml-1"
-                                ></span>
-                            </div>
-                            <p
-                                class="text-[#9dabb8] text-lg md:text-xl font-normal leading-relaxed mt-4 border-l-2 border-[#293038] pl-4"
+        <div class="page">
+            <PageHeader
+                :command="$t('about.whoami')"
+                :lead="aboutMeData?.intro || $t('about.intro')"
+            />
+
+            <div
+                class="mt-12 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_22rem] gap-6 lg:gap-8 items-start"
+            >
+                <!-- Documento: about-me.md / skills.json -->
+                <section class="pane overflow-hidden min-w-0">
+                    <div
+                        class="flex border-b border-console-border bg-console-raised overflow-x-auto"
+                        role="tablist"
+                        :aria-label="$t('about.files')"
+                    >
+                        <button
+                            v-for="tab in tabs"
+                            :id="`tab-${tab.id}`"
+                            :key="tab.id"
+                            type="button"
+                            role="tab"
+                            :aria-selected="activeTab === tab.id"
+                            :aria-controls="`panel-${tab.id}`"
+                            :tabindex="activeTab === tab.id ? 0 : -1"
+                            @keydown.right.prevent="focusTab(1)"
+                            @keydown.left.prevent="focusTab(-1)"
+                            @keydown.home.prevent="focusTab('first')"
+                            @keydown.end.prevent="focusTab('last')"
+                            class="relative flex items-center gap-2 h-11 px-5 shrink-0 border-r border-console-border font-mono text-xs transition-colors"
+                            :class="
+                                activeTab === tab.id
+                                    ? 'bg-console-bg text-white'
+                                    : 'text-console-muted hover:text-white'
+                            "
+                            @click="activeTab = tab.id"
+                        >
+                            <span
+                                aria-hidden="true"
+                                class="material-symbols-outlined text-[16px]"
+                                :class="tab.iconColor"
+                                >{{ tab.icon }}</span
                             >
-                                {{ aboutMeData?.intro || $t('about.intro') }}
+                            {{ tab.label }}
+                            <span
+                                v-if="activeTab === tab.id"
+                                class="absolute inset-x-0 bottom-0 h-0.5 bg-primary"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
+                    </div>
+
+                    <!-- ABOUT-ME.MD -->
+                    <div
+                        v-if="activeTab === 'about'"
+                        id="panel-about"
+                        role="tabpanel"
+                        aria-labelledby="tab-about"
+                        class="p-6 md:p-10"
+                    >
+                        <div
+                            class="max-w-[65ch] space-y-5 font-display text-[1.0625rem] leading-[1.75] text-console-text"
+                        >
+                            <p>
+                                {{ aboutMeData?.description1 || $t('about.description1') }}
+                            </p>
+                            <p>
+                                {{ aboutMeData?.description2 || $t('about.description2') }}
                             </p>
                         </div>
 
-                        <!-- Main Description -->
-                        <div
-                            class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10"
-                        >
-                            <div
-                                class="lg:col-span-2 text-[#9dabb8] space-y-4 leading-relaxed"
-                            >
-                                <p>
-                                    <span class="text-primary font-medium">
-                                        &gt;
-                                    </span>
-                                    {{
-                                        aboutMeData?.description1 ||
-                                        $t('about.description1')
-                                    }}
-                                </p>
-                                <p>
-                                    <span class="text-primary font-medium">
-                                        &gt;
-                                    </span>
-                                    {{
-                                        aboutMeData?.description2 ||
-                                        $t('about.description2')
-                                    }}
-                                </p>
-
-                                <div
-                                    class="mt-6 p-4 bg-[#161e27] border border-[#293038] rounded-lg font-mono text-sm"
+                        <!-- Stack -->
+                        <div class="mt-12 pt-10 border-t border-console-border">
+                            <div class="flex items-center justify-between gap-4 mb-6">
+                                <h2
+                                    class="flex items-baseline gap-3 font-display text-xl md:text-2xl font-bold tracking-[-0.02em] text-white"
                                 >
-                                    <div
-                                        class="flex gap-4 text-[#9dabb8] mb-2 border-b border-[#293038] pb-2"
-                                    >
-                                        <span>contact_info.json</span>
-                                    </div>
-                                    <div class="text-[#f8f9fa]">
-                                        <span class="text-[#abb2bf]">{</span
-                                        ><br />
-                                        &nbsp;&nbsp;<span class="text-[#e06c75]"
-                                            >"email"</span
-                                        >:
-                                        <span class="text-[#98c379]"
-                                            >"{{ contactInfo.email }}"</span
-                                        >,<br />
-                                        &nbsp;&nbsp;<span class="text-[#e06c75]"
-                                            >"location"</span
-                                        >:
-                                        <span class="text-[#98c379]"
-                                            >"{{ contactInfo.location }}"</span
-                                        >,<br />
-                                        &nbsp;&nbsp;<span class="text-[#e06c75]"
-                                            >"status"</span
-                                        >:
-                                        <span class="text-[#61afef]"
-                                            >"{{ contactInfo.status }}"</span
-                                        ><br />
-                                        <span class="text-[#abb2bf]">}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Profile Image / Avatar Placeholder -->
-                            <div class="relative group">
-                                <div
-                                    class="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"
-                                ></div>
-                                <div
-                                    class="relative w-full aspect-square rounded-lg bg-[#161e27] border border-[#293038] flex items-center justify-center overflow-hidden"
-                                >
-                                    <!-- Abstract tech background placeholder -->
-                                    <div
-                                        class="absolute inset-0 opacity-20"
-                                        style="
-                                            background-image: radial-gradient(
-                                                #293038 1px,
-                                                transparent 1px
-                                            );
-                                            background-size: 20px 20px;
-                                        "
-                                    ></div>
-                                    <span
-                                        aria-hidden="true"
-                                        class="material-symbols-outlined text-6xl text-[#9dabb8]"
-                                        >terminal</span
-                                    >
-                                    <img
-                                        alt="Server room with blue LED lights representing infrastructure"
-                                        class="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay hover:opacity-70 transition-opacity"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnJBD2x2pgNyJaRhfu54mMk-ztM3kUu9Fo8JKsEqJT0-LX9ieL_Unh3LOLx2prvXVcJo6pDEU17Ap015qZ7bw6og2Et5NX77BuqpEQMJwkMLkotIRAGTEHXtbpnub5-O_Lxwo8PjZAUABOWltLilU1QpaOr1Tf-NF5svmRjE4i4k_SBZWDiHGlQgUQBwrmp2JXY8G4YJimG3KwZeS1yvW9pZHl1_Z2IsEzLhQ7vIJtWF7oWISr0NJWTkhMThPEizGH4i8SlQ-PPTu-"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Stats Component -->
-                        <div class="mb-10">
-                            <h3
-                                class="text-white text-lg font-bold mb-4 flex items-center gap-2"
-                            >
-                                <span
-                                    aria-hidden="true"
-                                    class="material-symbols-outlined text-primary"
-                                    >bar_chart</span
-                                >
-                                {{ $t('about.systemMetrics') }}
-                            </h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div
-                                    v-for="metric in metrics"
-                                    :key="metric.key"
-                                    class="flex flex-col gap-2 rounded-lg p-6 border border-[#293038] bg-[#161e27] hover:border-primary/50 transition-colors"
-                                >
-                                    <div
-                                        class="flex justify-between items-start"
-                                    >
-                                        <p
-                                            class="text-[#9dabb8] text-sm font-medium"
-                                        >
-                                            {{
-                                                $t(
-                                                    `about.metrics.${metric.key}.label`,
-                                                )
-                                            }}
-                                        </p>
-                                        <span
-                                            aria-hidden="true"
-                                            class="material-symbols-outlined text-sm"
-                                            :class="metric.iconColor"
-                                        >
-                                            {{ metric.icon }}
-                                        </span>
-                                    </div>
-                                    <p
-                                        class="text-white text-2xl font-bold leading-tight"
-                                    >
-                                        {{ metric.value }}
-                                    </p>
-                                    <p
-                                        class="text-xs font-medium leading-normal flex items-center gap-1"
-                                        :class="metric.statusColor"
-                                    >
-                                        <span
-                                            aria-hidden="true"
-                                            class="material-symbols-outlined text-xs"
-                                        >
-                                            {{ metric.statusIcon }}
-                                        </span>
-                                        {{
-                                            $t(
-                                                `about.metrics.${metric.key}.status`,
-                                            )
-                                        }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Skills / Chips Component -->
-                        <div class="mb-10 relative">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3
-                                    class="text-white text-lg font-bold flex items-center gap-2"
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        class="material-symbols-outlined text-primary"
-                                        >extension</span
+                                    <span class="font-mono text-primary text-lg" aria-hidden="true"
+                                        >##</span
                                     >
                                     {{ $t('about.techStack') }}
-                                </h3>
+                                </h2>
                                 <AdminOnly>
                                     <button
+                                        type="button"
                                         @click="handleEditTechStack"
-                                        class="flex items-center gap-2 px-3 py-1.5 rounded text-sm font-mono transition-colors bg-console-bg border border-console-border text-gray-400 hover:border-primary hover:text-primary"
+                                        class="btn btn-ghost h-8 px-3 text-xs"
                                         title="Editar tech stack"
                                     >
                                         <span
@@ -282,78 +110,134 @@
                                     </button>
                                 </AdminOnly>
                             </div>
-                            <div
-                                class="bg-[#161e27] border border-[#293038] rounded-lg px-6 pt-4 pb-6"
-                            >
-                                <div
-                                    v-for="(
-                                        category, categoryKey, index
-                                    ) in techStack"
-                                    :key="categoryKey"
-                                    :class="index > 0 ? 'mt-8' : ''"
-                                >
-                                    <p
-                                        class="text-[#9dabb8] text-xs uppercase font-bold tracking-wider mb-4"
-                                    >
-                                        {{
-                                            $t(
-                                                `about.techStackCategories.${categoryKey}`,
-                                            )
-                                        }}
-                                    </p>
-                                    <div class="flex gap-3 flex-wrap">
-                                        <div
+
+                            <div class="space-y-7">
+                                <div v-for="(category, categoryKey) in techStack" :key="categoryKey">
+                                    <h3 class="font-mono text-xs text-console-muted mb-3">
+                                        {{ $t(`about.techStackCategories.${categoryKey}`) }}:
+                                    </h3>
+                                    <ul role="list" class="flex flex-wrap gap-2">
+                                        <li
                                             v-for="tech in category"
                                             :key="tech.name"
-                                            class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded border border-[#293038] bg-[#111418] pl-3 pr-3 hover:border-primary/50 transition-colors cursor-default"
+                                            class="flag text-sm text-console-text px-3 py-2"
                                         >
                                             <span
                                                 class="w-2 h-2 rounded-full"
-                                                :style="{
-                                                    backgroundColor: tech.color,
-                                                }"
+                                                :style="{ backgroundColor: tech.color }"
+                                                aria-hidden="true"
                                             ></span>
-                                            <p
-                                                class="text-white text-sm font-medium"
-                                            >
-                                                {{ tech.name }}
-                                            </p>
-                                        </div>
-                                    </div>
+                                            {{ tech.name }}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Footer-like Terminal Line -->
-                        <div
-                            class="flex items-center gap-2 mt-12 mb-4 pt-8 border-t border-[#293038] text-[#9dabb8] text-sm font-mono"
-                        >
-                            <span class="text-primary">root@server:~$</span>
-                            <span class="animate-pulse">_</span>
-                        </div>
                     </div>
 
-                    <!-- SKILLS.JSON TAB -->
-                    <div v-else>
-                        <div
-                            class="flex-1 overflow-y-auto py-4 font-mono text-sm text-[#abb2bf] subpixel-antialiased"
-                            style="counter-reset: line"
-                        >
-                            <pre
-                                class="whitespace-pre-wrap"
-                            ><code class="block json-viewer">
-<span
+                    <!-- SKILLS.JSON -->
+                    <div
+                        v-else
+                        id="panel-skills"
+                        role="tabpanel"
+                        aria-labelledby="tab-skills"
+                        class="py-6 pr-6 pl-3 overflow-x-auto font-mono text-sm leading-relaxed text-[#abb2bf]"
+                        style="counter-reset: line"
+                    >
+                        <pre
+                            class="whitespace-pre-wrap"
+                        ><code class="block json-viewer"><span
   v-for="(line, index) in skillsLines"
   :key="index"
   class="code-line"
   v-html="highlightJsonLine(line)"
-></span>
-</code></pre>
-                        </div>
+></span></code></pre>
                     </div>
-                </div>
+                </section>
+
+                <!-- Lateral: contacto -->
+                <aside class="space-y-6 lg:sticky lg:top-24">
+                    <section class="pane overflow-hidden" aria-labelledby="contact-title">
+                        <h2 id="contact-title" class="pane-head">
+                            <span
+                                aria-hidden="true"
+                                class="material-symbols-outlined text-[16px] text-[#fbc02d]"
+                                >data_object</span
+                            >
+                            contact_info.json
+                        </h2>
+                        <div class="p-5 font-mono text-[13px] leading-7 [overflow-wrap:anywhere]">
+                            <span class="json-punct">{</span>
+                            <dl class="pl-4">
+                                <div v-if="contactInfo.status">
+                                    <dt class="inline json-key">"status"</dt><span class="json-punct">: </span>
+                                    <dd class="inline text-prompt">
+                                        <span
+                                            class="inline-block w-1.5 h-1.5 mr-1 align-middle rounded-full bg-prompt live-dot"
+                                            aria-hidden="true"
+                                        ></span
+                                        >"{{ contactInfo.status }}"</dd
+                                    ><span class="json-punct">,</span>
+                                </div>
+                                <div v-if="contactInfo.location">
+                                    <dt class="inline json-key">"location"</dt><span class="json-punct">: </span>
+                                    <dd class="inline json-string">"{{ contactInfo.location }}"</dd
+                                    ><span class="json-punct">,</span>
+                                </div>
+                                <div v-if="contactInfo.email">
+                                    <dt class="inline json-key">"email"</dt><span class="json-punct">: </span>
+                                    <dd class="inline json-string">"{{ contactInfo.email }}"</dd
+                                    ><span class="json-punct">,</span>
+                                </div>
+                                <div>
+                                    <dt class="inline json-key">"linkedin"</dt><span class="json-punct">: </span>
+                                    <dd class="inline">
+                                        <a
+                                            :href="CONTACT_URL"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-primary hover:underline rounded-sm"
+                                            >"{{ contactHandle }}"</a
+                                        >
+                                    </dd>
+                                </div>
+                            </dl>
+                            <span class="json-punct">}</span>
+                        </div>
+                        <div class="px-5 pb-5">
+                            <a
+                                :href="CONTACT_URL"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-primary w-full"
+                            >
+                                <span aria-hidden="true" class="material-symbols-outlined text-[18px]"
+                                    >mail</span
+                                >
+                                {{ $t('terminal.contact') }}
+                            </a>
+                        </div>
+                    </section>
+
+                    <router-link
+                        to="/projects"
+                        class="pane group flex items-center justify-between gap-4 p-5 transition-colors hover:border-primary"
+                    >
+                        <span>
+                            <span class="block font-mono text-xs text-console-muted">~/projects</span>
+                            <span class="mt-1 block font-display font-semibold text-white">
+                                {{ $t('about.seeProjects') }}
+                            </span>
+                        </span>
+                        <span
+                            aria-hidden="true"
+                            class="material-symbols-outlined text-primary transition-transform duration-200 ease-out-expo group-hover:translate-x-1"
+                            >arrow_forward</span
+                        >
+                    </router-link>
+                </aside>
             </div>
-        </main>
+        </div>
 
         <!-- Modales de edición -->
         <EditAboutModal
@@ -380,9 +264,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, provide, watch } from 'vue';
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import Sidebar from '../components/Sidebar.vue';
+import PageHeader from '../components/PageHeader.vue';
 import EditAboutModal from '../components/EditAboutModal.vue';
 import EditSkillsModal from '../components/EditSkillsModal.vue';
 import EditTechStackModal from '../components/EditTechStackModal.vue';
@@ -392,31 +276,44 @@ import {
     getMetrics,
     getTechStack,
     getSkills as getStaticSkills,
+    CONTACT_URL,
 } from '../data/static.js';
 import {
     getAboutMe,
     getSkills as getFirestoreSkills,
     getTechStack as getFirestoreTechStack,
 } from '../data/firestore.js';
-import { useAdmin } from '../composables/useAuth.js';
 
 const { t, locale } = useI18n();
-const { isAdmin } = useAdmin();
 const showEditAboutModal = ref(false);
 const showEditSkillsModal = ref(false);
 const showEditTechStackModal = ref(false);
 
 const activeTab = ref('about');
 
-// Proporcionar función para cambiar el tab desde el Sidebar y el estado actual
-const setActiveTab = (tab) => {
-    activeTab.value = tab;
+const tabs = [
+    { id: 'about', label: 'about-me.md', icon: 'description', iconColor: 'text-[#61afef]' },
+    { id: 'skills', label: 'skills.json', icon: 'data_object', iconColor: 'text-[#fbc02d]' },
+];
+
+// Flechas izquierda/derecha (y Inicio/Fin) cambian de pestaña y mueven el foco
+const focusTab = (step) => {
+    const ids = tabs.map((t) => t.id);
+    const current = ids.indexOf(activeTab.value);
+    const next =
+        step === 'first'
+            ? 0
+            : step === 'last'
+              ? ids.length - 1
+              : (current + step + ids.length) % ids.length;
+    activeTab.value = ids[next];
+    nextTick(() => document.getElementById(`tab-${ids[next]}`)?.focus());
 };
-provide('setActiveTab', setActiveTab);
-provide('activeTab', activeTab);
+
+const contactHandle = CONTACT_URL.replace(/^https?:\/\/(www\.)?linkedin\.com\//, '');
 
 const contactInfo = ref({
-    email: 'dev@root.sh',
+    email: '',
     location: 'Remote / Madrid',
     status: 'Open for hire',
 });

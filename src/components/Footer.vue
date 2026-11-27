@@ -1,65 +1,43 @@
 <template>
-    <footer class="border-t border-console-border bg-[#0d1117] mt-auto">
-        <div class="max-w-[1280px] mx-auto px-4 py-8 md:px-8">
-            <div
-                class="flex flex-col md:flex-row justify-between items-center gap-6"
-            >
-                <div class="flex items-center gap-6">
-                    <a
-                        v-for="(url, key) in socialLinks"
-                        :key="key"
-                        :href="url"
-                        class="group flex flex-col items-center gap-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span
-                            aria-hidden="true"
-                            class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors"
-                        >
-                            {{ getIcon(key) }}
-                        </span>
-                        <span
-                            class="text-[10px] text-gray-600 font-mono group-hover:text-primary"
-                        >
-                            {{ $t(`social.${key}`) }}
-                        </span>
-                    </a>
-                </div>
-
-                <div
-                    class="flex items-center gap-4 text-xs font-mono text-gray-500 bg-[#161b22] px-4 py-2 rounded-full border border-console-border"
+    <footer class="mt-auto border-t border-console-border bg-console-bg font-mono text-xs">
+        <div class="page py-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <nav :aria-label="$t('footer.social')" class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <a
+                    v-for="(url, key) in socialLinks"
+                    :key="key"
+                    :href="url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex items-center gap-1.5 text-sm text-console-text hover:text-primary transition-colors rounded-sm"
                 >
-                    <span class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                        {{ $t('footer.online') }}
-                    </span>
-                    <span class="w-px h-3 bg-gray-700"></span>
-                    <span>{{ $t('footer.encoding') }}</span>
-                    <span class="w-px h-3 bg-gray-700"></span>
-                    <span class="flex items-center gap-1 text-primary">
-                        <span aria-hidden="true" class="material-symbols-outlined text-[14px]"
-                            >language</span
-                        >
-                        {{ $t('footer.locale') }}
-                    </span>
-                    <span class="w-px h-3 bg-gray-700"></span>
-                    <span class="flex items-center gap-1">
-                        <span aria-hidden="true" class="material-symbols-outlined text-[14px]"
-                            >call_split</span
-                        >
-                        {{ $t('footer.branch') }}
-                    </span>
-                </div>
-            </div>
+                    <span class="text-console-muted group-hover:text-primary" aria-hidden="true">~/</span>{{ $t(`social.${key}`).toLowerCase() }}
+                    <span
+                        aria-hidden="true"
+                        class="material-symbols-outlined text-[14px] text-console-muted group-hover:text-primary transition-transform duration-200 ease-out-expo group-hover:-translate-y-px group-hover:translate-x-px"
+                        >north_east</span
+                    >
+                </a>
+            </nav>
 
-            <div class="text-center mt-6 space-y-1">
-                <p class="text-[10px] text-gray-600/80 font-mono">
-                    {{ $t('footer.localStorageNotice') }}
-                </p>
-                <p class="text-xs text-gray-600">
-                    {{ $t('footer.copyright', { year: new Date().getFullYear() }) }}
-                </p>
+            <!-- Barra de estado -->
+            <ul role="list" class="flex flex-wrap items-center gap-x-5 gap-y-2 text-console-muted">
+                <li class="flex items-center gap-2 text-prompt">
+                    <span class="w-1.5 h-1.5 rounded-full bg-prompt live-dot" aria-hidden="true"></span>
+                    {{ $t('footer.online') }}
+                </li>
+                <li>{{ $t('footer.encoding') }}</li>
+                <li>{{ $t('footer.locale') }}</li>
+                <li class="flex items-center gap-1">
+                    <span aria-hidden="true" class="material-symbols-outlined text-[14px]">call_split</span>
+                    {{ $t('footer.branch') }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="border-t border-console-border">
+            <div class="page py-4 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between text-[11px] text-console-muted">
+                <p>{{ $t('footer.copyright', { year: new Date().getFullYear() }) }}</p>
+                <p>{{ $t('footer.localStorageNotice') }}</p>
             </div>
         </div>
     </footer>
@@ -72,14 +50,4 @@ defineProps({
         default: () => ({}),
     },
 });
-
-const getIcon = (key) => {
-    const icons = {
-        github: 'terminal',
-        gitlab: 'hub',
-        stackoverflow: 'code',
-        linkedin: 'person_search',
-    };
-    return icons[key] || 'link';
-};
 </script>

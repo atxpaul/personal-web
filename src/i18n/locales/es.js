@@ -9,6 +9,8 @@ export default {
         logout: './logout.sh',
     },
     about: {
+        files: 'Archivos del perfil',
+        seeProjects: 'Ver lo que he construido',
         whoami: 'whoami',
         intro: 'Ingeniero DevOps especializado en automatización, nube y escalabilidad. Construyo puentes entre código y operaciones.',
         description1:
@@ -57,6 +59,11 @@ export default {
         contact: './contact_me.sh',
     },
     projects: {
+        openDetail: 'cat project.yml',
+        colName: 'Nombre',
+        colStack: 'Stack',
+        colModified: 'Modificado',
+        results: 'Resultados',
         latestDeployment: 'Latest Deployment',
         subtitleDefault:
             'Explorando soluciones de infraestructura como código, orquestación de contenedores y pipelines de automatización.',
@@ -79,6 +86,7 @@ export default {
         close: 'Cerrar',
     },
     blog: {
+        lead: 'Notas técnicas sobre infraestructura, CI/CD y operación en la nube.',
         comingSoon: 'Aún no hay artículos. Los textos técnicos están en camino.',
     },
     notFound: {
@@ -94,10 +102,12 @@ export default {
         loading: 'Iniciando sesión...',
     },
     header: {
+        nav: 'Navegación principal',
         language: 'Idioma',
         menu: 'Abrir o cerrar navegación',
     },
     footer: {
+        social: 'Perfiles sociales',
         copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
         localStorageNotice:
             'Usamos almacenamiento local para recordar tu idioma.',
@@ -111,5 +121,15 @@ export default {
         gitlab: 'GitLab',
         stackoverflow: 'StackOverflow',
         linkedin: 'LinkedIn',
+    },
+    home: {
+        summary: 'Resumen del perfil',
+        fetch: {
+            role: 'rol',
+            location: 'ubicación',
+            status: 'estado',
+            contact: 'contacto',
+            stack: 'stack',
+        },
     },
 };

@@ -1,88 +1,79 @@
 <template>
-  <header class="sticky top-0 z-50 w-full border-b border-console-border bg-background-dark/95 backdrop-blur supports-[backdrop-filter]:bg-background-dark/60">
-    <div class="px-4 md:px-6 lg:px-8 max-w-[1280px] mx-auto">
-      <div class="flex h-16 items-center justify-between">
+  <header class="sticky top-0 z-50 w-full border-b border-console-border bg-background-dark/90 backdrop-blur-md supports-[backdrop-filter]:bg-background-dark/75">
+    <div class="page">
+      <div class="flex h-16 items-center justify-between gap-6">
         <router-link
           to="/"
-          class="flex items-center gap-2 text-white hover:text-primary transition-colors"
+          class="group flex items-center gap-2.5 font-mono text-sm font-bold text-white rounded-sm"
         >
-          <span aria-hidden="true" class="material-symbols-outlined text-primary text-2xl">terminal</span>
-          <h1 class="text-lg font-bold tracking-tight">~/devops_portfolio</h1>
+          <span
+            class="grid place-items-center w-7 h-7 rounded-md border border-console-border bg-console-bg text-prompt text-xs transition-colors group-hover:border-primary"
+            aria-hidden="true"
+            >&gt;_</span
+          >
+          <span class="whitespace-nowrap">~/devops_portfolio</span>
         </router-link>
-        
-        <nav class="hidden md:flex items-center gap-6">
-          <router-link 
-            to="/about"
-            class="text-sm font-medium hover:text-primary transition-colors text-gray-300"
-            active-class="text-primary"
+
+        <nav class="hidden md:flex items-stretch self-stretch gap-0 lg:gap-1" :aria-label="$t('header.nav')">
+          <router-link
+            v-for="link in links"
+            :key="link.to"
+            :to="link.to"
+            class="nav-link relative flex items-center px-2 lg:px-3 whitespace-nowrap font-mono text-[13px] text-console-muted hover:text-white transition-colors"
+            active-class="is-active"
           >
-            {{ $t('nav.about') }}
-          </router-link>
-          <router-link 
-            to="/projects"
-            class="text-sm font-medium hover:text-primary transition-colors text-gray-300"
-            active-class="text-primary"
-          >
-            {{ $t('nav.projects') }}
-          </router-link>
-          <router-link 
-            to="/blog"
-            class="text-sm font-medium hover:text-primary transition-colors text-gray-300"
-            active-class="text-primary"
-          >
-            {{ $t('nav.blog') }}
+            {{ $t(link.label) }}
           </router-link>
         </nav>
-        
-        <div class="flex items-center gap-4">
+
+        <div class="flex items-center gap-2">
           <!-- Admin Badge -->
-          <div v-if="isAdmin" class="hidden md:flex items-center gap-2 bg-green-500/20 border border-green-500/50 px-3 py-1.5 rounded-lg">
-            <span aria-hidden="true" class="material-symbols-outlined text-green-400 text-sm">admin_panel_settings</span>
-            <span class="text-xs font-mono text-green-400 uppercase tracking-widest">ADMIN</span>
-          </div>
-          
-          <div class="hidden md:flex items-center gap-2 bg-[#0d1117] border border-console-border px-3 py-1.5 rounded-lg">
-            <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LANG:</span>
-            <div class="relative flex items-center group">
-              <span class="text-xs font-mono text-green-400">lang --set</span>
-              <select
-                v-model="currentLocale"
-                :aria-label="$t('header.language')"
-                @change="changeLocale"
-                class="bg-transparent border-none text-xs font-mono text-white focus:ring-0 cursor-pointer py-0 pl-1 pr-4 appearance-none"
-              >
-                <option class="bg-console-bg" value="es">es</option>
-                <option class="bg-console-bg" value="en">en</option>
-                <option class="bg-console-bg" value="de">de</option>
-                <option class="bg-console-bg" value="fr">fr</option>
-              </select>
-              <span aria-hidden="true" class="material-symbols-outlined text-xs text-gray-500 absolute right-0 pointer-events-none">expand_more</span>
-            </div>
-          </div>
-          
-          <div class="hidden md:flex">
-            <button 
-              v-if="!user"
-              @click="showLoginModal = true"
-              class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+          <span v-if="isAdmin" class="hidden md:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md border border-prompt/40 font-mono text-[11px] text-prompt">
+            <span aria-hidden="true" class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+            root
+          </span>
+
+          <label class="hidden md:inline-flex relative items-center h-8 pl-3 pr-7 rounded-md border border-console-border bg-console-bg font-mono text-xs hover:border-console-muted focus-within:border-primary transition-colors">
+            <span class="text-console-muted mr-1.5" aria-hidden="true">lang</span>
+            <select
+              v-model="currentLocale"
+              :aria-label="$t('header.language')"
+              @change="changeLocale"
+              class="bg-transparent border-none p-0 text-xs font-mono text-white focus:ring-0 focus:outline-none cursor-pointer appearance-none"
             >
-              <span aria-hidden="true" class="material-symbols-outlined text-[18px]">login</span>
-              <span>{{ $t('nav.login') }}</span>
-            </button>
-            <button 
-              v-else
-              @click="handleLogout"
-              class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
-            >
-              <span aria-hidden="true" class="material-symbols-outlined text-[18px]">logout</span>
-              <span>{{ $t('nav.logout') }}</span>
-            </button>
-          </div>
-          
+              <option v-for="l in locales" :key="l" class="bg-console-bg" :value="l">{{ l }}</option>
+            </select>
+            <span aria-hidden="true" class="material-symbols-outlined text-sm text-console-muted absolute right-1.5 pointer-events-none">expand_more</span>
+          </label>
+
+          <!-- Acceso: solo lo usa el propietario, así que no compite con las acciones del visitante -->
           <button
-            class="md:hidden p-2 text-gray-300 hover:text-white"
+            v-if="!user"
+            type="button"
+            @click="showLoginModal = true"
+            :aria-label="$t('nav.login')"
+            class="hidden md:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md font-mono text-xs whitespace-nowrap text-console-muted hover:text-white hover:bg-console-raised transition-colors"
+          >
+            <span aria-hidden="true" class="material-symbols-outlined text-[16px]">login</span>
+            <span class="hidden lg:inline">{{ $t('nav.login') }}</span>
+          </button>
+          <button
+            v-else
+            type="button"
+            @click="handleLogout"
+            :aria-label="$t('nav.logout')"
+            class="hidden md:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md font-mono text-xs whitespace-nowrap text-console-muted hover:text-white hover:bg-console-raised transition-colors"
+          >
+            <span aria-hidden="true" class="material-symbols-outlined text-[16px]">logout</span>
+            <span class="hidden lg:inline">{{ $t('nav.logout') }}</span>
+          </button>
+
+          <button
+            type="button"
+            class="md:hidden grid place-items-center w-10 h-10 -mr-2 rounded-md text-console-text hover:text-white hover:bg-console-raised"
             @click="toggleMobileMenu"
             :aria-expanded="isMobileOpen ? 'true' : 'false'"
+            aria-controls="mobile-menu"
             :aria-label="$t('header.menu')"
           >
             <span aria-hidden="true" class="material-symbols-outlined">
@@ -95,72 +86,54 @@
       <!-- Mobile menu -->
       <div
         v-if="isMobileOpen"
-        class="md:hidden border-t border-console-border bg-background-dark/95 pb-4"
+        id="mobile-menu"
+        class="md:hidden border-t border-console-border pb-5"
       >
-        <nav class="flex flex-col gap-2 pt-4">
+        <nav class="flex flex-col pt-3" :aria-label="$t('header.nav')">
           <router-link
-            to="/about"
-            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
-            active-class="text-primary bg-black/30"
+            v-for="link in links"
+            :key="link.to"
+            :to="link.to"
+            class="flex items-center gap-3 h-11 px-2 rounded-md font-mono text-sm text-console-text hover:bg-console-raised"
+            active-class="!text-white bg-console-raised"
           >
-            {{ $t('nav.about') }}
-          </router-link>
-          <router-link
-            to="/projects"
-            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
-            active-class="text-primary bg-black/30"
-          >
-            {{ $t('nav.projects') }}
-          </router-link>
-          <router-link
-            to="/blog"
-            class="px-2 py-1.5 text-sm font-medium text-gray-300 hover:text-primary hover:bg-black/20 rounded"
-            active-class="text-primary bg-black/30"
-          >
-            {{ $t('nav.blog') }}
+            <span class="text-prompt" aria-hidden="true">$</span>
+            {{ $t(link.label) }}
           </router-link>
         </nav>
 
-        <div class="mt-4 flex flex-col gap-3 px-2">
-          <!-- Admin Badge Mobile -->
-          <div v-if="isAdmin" class="flex items-center justify-center gap-2 bg-green-500/20 border border-green-500/50 px-3 py-1.5 rounded-lg">
-            <span aria-hidden="true" class="material-symbols-outlined text-green-400 text-sm">admin_panel_settings</span>
-            <span class="text-xs font-mono text-green-400 uppercase tracking-widest">ADMIN</span>
-          </div>
-          
-          <div class="flex items-center justify-between bg-[#0d1117] border border-console-border px-3 py-1.5 rounded-lg">
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LANG:</span>
-              <span class="text-xs font-mono text-green-400">lang --set</span>
-            </div>
-            <div class="relative flex items-center">
-              <select
-                v-model="currentLocale"
-                :aria-label="$t('header.language')"
-                @change="changeLocale"
-                class="bg-transparent border-none text-xs font-mono text-white focus:ring-0 cursor-pointer py-0 pl-1 pr-4 appearance-none"
-              >
-                <option class="bg-console-bg" value="es">es</option>
-                <option class="bg-console-bg" value="en">en</option>
-                <option class="bg-console-bg" value="de">de</option>
-                <option class="bg-console-bg" value="fr">fr</option>
-              </select>
-              <span aria-hidden="true" class="material-symbols-outlined text-xs text-gray-500 absolute right-0 pointer-events-none">expand_more</span>
-            </div>
-          </div>
+        <div class="mt-4 pt-4 border-t border-console-border flex items-center justify-between gap-3">
+          <label class="relative inline-flex items-center h-10 pl-3 pr-8 rounded-md border border-console-border bg-console-bg font-mono text-sm">
+            <span class="text-console-muted mr-2" aria-hidden="true">lang</span>
+            <select
+              v-model="currentLocale"
+              :aria-label="$t('header.language')"
+              @change="changeLocale"
+              class="bg-transparent border-none p-0 text-sm font-mono text-white focus:ring-0 focus:outline-none cursor-pointer appearance-none"
+            >
+              <option v-for="l in locales" :key="l" class="bg-console-bg" :value="l">{{ l }}</option>
+            </select>
+            <span aria-hidden="true" class="material-symbols-outlined text-sm text-console-muted absolute right-2 pointer-events-none">expand_more</span>
+          </label>
+
+          <span v-if="isAdmin" class="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md border border-prompt/40 font-mono text-[11px] text-prompt">
+            root
+          </span>
 
           <button
             v-if="!user"
+            type="button"
             @click="showLoginModal = true"
-            class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+            class="inline-flex items-center gap-1.5 h-10 px-3 rounded-md font-mono text-sm text-console-muted hover:text-white hover:bg-console-raised"
           >
             <span aria-hidden="true" class="material-symbols-outlined text-[18px]">login</span>
             <span>{{ $t('nav.login') }}</span>
           </button>
           <button
             v-else
+            type="button"
             @click="handleLogout"
-            class="w-full bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+            class="inline-flex items-center gap-1.5 h-10 px-3 rounded-md font-mono text-sm text-console-muted hover:text-white hover:bg-console-raised"
           >
             <span aria-hidden="true" class="material-symbols-outlined text-[18px]">logout</span>
             <span>{{ $t('nav.logout') }}</span>
@@ -170,7 +143,7 @@
     </div>
 
     <!-- Login Modal -->
-    <LoginModal 
+    <LoginModal
       :is-open="showLoginModal"
       @close="showLoginModal = false"
       @success="handleLoginSuccess"
@@ -183,12 +156,19 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
-import { saveLocale } from '../i18n'
+import { saveLocale, SUPPORTED_LOCALES } from '../i18n'
 import LoginModal from './LoginModal.vue'
 
 const { locale } = useI18n()
 const route = useRoute()
 const { user, logout, isAdmin } = useAuth()
+
+const links = [
+  { to: '/about', label: 'nav.about' },
+  { to: '/projects', label: 'nav.projects' },
+  { to: '/blog', label: 'nav.blog' },
+]
+const locales = SUPPORTED_LOCALES
 
 const currentLocale = ref(locale.value)
 const isMobileOpen = ref(false)
@@ -224,3 +204,31 @@ watch(
 )
 </script>
 
+<style scoped>
+/* Pestaña activa: subrayado azul pegado al borde inferior del header */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: -1px;
+  height: 2px;
+  background: #197fe6;
+  transform: scaleX(0);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link.is-active {
+  color: #ffffff;
+}
+
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::after {
+    transition: none;
+  }
+}
+</style>
