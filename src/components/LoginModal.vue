@@ -5,8 +5,15 @@
         v-if="isOpen"
         class="modal-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6"
         @click.self="close"
+        @keydown.esc="close"
       >
-        <div class="modal-content bg-console-bg border border-console-border rounded-xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90vh] sm:max-h-none flex flex-col">
+        <div
+          ref="dialogEl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="login-title"
+          tabindex="-1"
+          class="modal-content outline-none bg-console-bg border border-console-border rounded-xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90vh] sm:max-h-none flex flex-col">
       <!-- Header -->
       <div class="bg-[#161b22] border-b border-console-border px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -19,9 +26,11 @@
         </div>
         <button
           @click="close"
+          type="button"
+          :aria-label="$t('common.close')"
           class="text-gray-500 hover:text-white transition-colors"
         >
-          <span class="material-symbols-outlined text-lg">close</span>
+          <span aria-hidden="true" class="material-symbols-outlined text-lg">close</span>
         </button>
       </div>
 
@@ -30,10 +39,10 @@
         <div class="mb-6">
           <div class="flex items-center gap-2 mb-2">
             <span class="text-primary text-xl font-bold">$</span>
-            <h2 class="text-white text-2xl font-bold font-mono">./login.sh</h2>
+            <h2 id="login-title" class="text-white text-2xl font-bold font-mono">./login.sh</h2>
           </div>
           <p class="text-gray-400 text-sm">
-            Inicia sesión con tu cuenta de Google
+            {{ $t('login.subtitle') }}
           </p>
         </div>
 
@@ -48,7 +57,7 @@
               @click="close"
               class="flex-1 bg-[#21262d] hover:bg-[#30363d] border border-console-border text-white text-sm font-bold py-2.5 px-4 rounded-lg transition-colors"
             >
-              Cancel
+              {{ $t('login.cancel') }}
             </button>
             <button
               type="button"
@@ -56,14 +65,14 @@
               :disabled="loading"
               class="flex-1 bg-white hover:bg-gray-100 text-gray-900 text-sm font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <svg v-if="!loading" class="w-5 h-5" viewBox="0 0 24 24">
+              <svg v-if="!loading" class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
-              <span v-if="loading" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
-              <span>{{ loading ? 'Cargando...' : 'Continuar con Google' }}</span>
+              <span aria-hidden="true" v-if="loading" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
+              <span>{{ loading ? $t('login.loading') : $t('login.google') }}</span>
             </button>
           </div>
         </div>
@@ -133,7 +142,7 @@
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { Teleport, Transition } from 'vue'
 import { useAuth } from '../composables/useAuth.js'
 
@@ -148,6 +157,18 @@ const emit = defineEmits(['close', 'success'])
 
 const { login } = useAuth()
 const loading = ref(false)
+const dialogEl = ref(null)
+
+// Al abrir, mover el foco dentro del diálogo para que Esc y Tab funcionen
+watch(
+  () => props.isOpen,
+  async (open) => {
+    if (open) {
+      await nextTick()
+      dialogEl.value?.focus()
+    }
+  }
+)
 const error = ref(null)
 
 const close = () => {

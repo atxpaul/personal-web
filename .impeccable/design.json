@@ -1,0 +1,579 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-27T18:59:36.119Z",
+  "title": "Design System: Pablo Pan · DevOps Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "deploy-blue": {
+        "role": "primary",
+        "displayName": "Deploy Blue",
+        "canonical": "oklch(59.8% 0.179 253)",
+        "tonalRamp": [
+          "#000829",
+          "#001e60",
+          "#00389a",
+          "#005abe",
+          "#1a80e7",
+          "#62a7fa",
+          "#a7cefe",
+          "#e3f0ff"
+        ]
+      },
+      "prompt-green": {
+        "role": "secondary",
+        "displayName": "Prompt Green",
+        "canonical": "oklch(80.0% 0.182 151)",
+        "tonalRamp": [
+          "#001300",
+          "#003300",
+          "#005700",
+          "#00771d",
+          "#009d43",
+          "#54be76",
+          "#a3dab0",
+          "#e3f4e6"
+        ]
+      },
+      "signal-green": {
+        "role": "secondary",
+        "displayName": "Signal Green",
+        "canonical": "oklch(77.6% 0.222 148)",
+        "tonalRamp": [
+          "#001300",
+          "#003500",
+          "#005900",
+          "#007a00",
+          "#00a01a",
+          "#44c162",
+          "#9edda6",
+          "#e1f5e3"
+        ]
+      },
+      "amber-bolt": {
+        "role": "tertiary",
+        "displayName": "Amber Bolt",
+        "canonical": "oklch(83.9% 0.162 84)",
+        "tonalRamp": [
+          "#180600",
+          "#3d1a00",
+          "#663100",
+          "#875100",
+          "#ac7500",
+          "#c99d38",
+          "#e1c794",
+          "#f6eede"
+        ]
+      },
+      "page-night": {
+        "role": "neutral",
+        "displayName": "Page Night",
+        "canonical": "oklch(20.9% 0.020 248)",
+        "tonalRamp": [
+          "#090b0f",
+          "#1f252b",
+          "#38414a",
+          "#555f69",
+          "#77818c",
+          "#9da6ae",
+          "#c6cbd0",
+          "#edeff0"
+        ]
+      },
+      "console-black": {
+        "role": "neutral",
+        "displayName": "Console Black",
+        "canonical": "oklch(17.6% 0.014 258)",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#212429",
+          "#3b4047",
+          "#595e66",
+          "#7b8189",
+          "#a0a5ac",
+          "#c8cbcf",
+          "#eeeef0"
+        ]
+      },
+      "window-chrome": {
+        "role": "neutral",
+        "displayName": "Window Chrome",
+        "canonical": "oklch(22.0% 0.016 256)",
+        "tonalRamp": [
+          "#090b0e",
+          "#21242a",
+          "#3a4048",
+          "#585e67",
+          "#7a818a",
+          "#a0a5ac",
+          "#c8cbcf",
+          "#edeef0"
+        ]
+      },
+      "control-graphite": {
+        "role": "neutral",
+        "displayName": "Control Graphite",
+        "canonical": "oklch(26.7% 0.015 256)",
+        "tonalRamp": [
+          "#090b0e",
+          "#212429",
+          "#3b4048",
+          "#585e66",
+          "#7b8189",
+          "#a0a5ac",
+          "#c8cbcf",
+          "#edeef0"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(33.0% 0.015 252)",
+        "tonalRamp": [
+          "#090b0e",
+          "#202429",
+          "#3a4048",
+          "#585e66",
+          "#7a8189",
+          "#9fa5ac",
+          "#c7cbcf",
+          "#edeef0"
+        ]
+      },
+      "console-text": {
+        "role": "neutral",
+        "displayName": "Console Text",
+        "canonical": "oklch(85.7% 0.014 247)",
+        "tonalRamp": [
+          "#090b0e",
+          "#202529",
+          "#3a4147",
+          "#585e65",
+          "#7a8188",
+          "#9fa5ab",
+          "#c7cbce",
+          "#edeef0"
+        ]
+      },
+      "ink-bright": {
+        "role": "neutral",
+        "displayName": "Ink Bright"
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "tonalRamp": [
+          "#030712",
+          "#111827",
+          "#1f2937",
+          "#374151",
+          "#4b5563",
+          "#6b7280",
+          "#9ca3af",
+          "#d1d5db"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "tonalRamp": [
+          "#030712",
+          "#111827",
+          "#1f2937",
+          "#374151",
+          "#4b5563",
+          "#6b7280",
+          "#9ca3af",
+          "#d1d5db"
+        ]
+      },
+      "ink-faint": {
+        "role": "neutral",
+        "displayName": "Ink Faint",
+        "tonalRamp": [
+          "#030712",
+          "#111827",
+          "#1f2937",
+          "#374151",
+          "#4b5563",
+          "#6b7280",
+          "#9ca3af",
+          "#d1d5db"
+        ]
+      },
+      "explorer-ink": {
+        "role": "neutral",
+        "displayName": "Explorer Ink",
+        "canonical": "oklch(19.0% 0.009 255)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#222427",
+          "#3c4045",
+          "#5a5e63",
+          "#7d8186",
+          "#a2a5a9",
+          "#c9cbcd",
+          "#eeeeef"
+        ]
+      },
+      "explorer-hover": {
+        "role": "neutral",
+        "displayName": "Explorer Hover",
+        "canonical": "oklch(25.7% 0.022 254)",
+        "tonalRamp": [
+          "#090b0f",
+          "#1f252c",
+          "#38414c",
+          "#555f6a",
+          "#77818e",
+          "#9da5b0",
+          "#c6cbd1",
+          "#edeef0"
+        ]
+      },
+      "explorer-line": {
+        "role": "neutral",
+        "displayName": "Explorer Line",
+        "canonical": "oklch(30.6% 0.017 251)",
+        "tonalRamp": [
+          "#090b0e",
+          "#20252a",
+          "#394149",
+          "#575e67",
+          "#79818b",
+          "#9fa5ad",
+          "#c7cbd0",
+          "#edeef0"
+        ]
+      },
+      "explorer-muted": {
+        "role": "neutral",
+        "displayName": "Explorer Muted",
+        "canonical": "oklch(73.4% 0.025 246)",
+        "tonalRamp": [
+          "#080c0f",
+          "#1d252c",
+          "#35414c",
+          "#535f6b",
+          "#75828e",
+          "#9ba6b0",
+          "#c5cbd1",
+          "#edeff1"
+        ]
+      },
+      "light-close": {
+        "role": "tertiary",
+        "displayName": "Close Light"
+      },
+      "light-minimize": {
+        "role": "tertiary",
+        "displayName": "Minimize Light"
+      },
+      "light-zoom": {
+        "role": "tertiary",
+        "displayName": "Zoom Light"
+      },
+      "syntax-rose": {
+        "role": "tertiary",
+        "displayName": "Syntax Rose",
+        "canonical": "oklch(67.1% 0.145 16)",
+        "tonalRamp": [
+          "#1f0003",
+          "#4b0010",
+          "#7a0422",
+          "#9f313f",
+          "#c75660",
+          "#e3868b",
+          "#f2babb",
+          "#fce9ea"
+        ]
+      },
+      "syntax-sage": {
+        "role": "tertiary",
+        "displayName": "Syntax Sage",
+        "canonical": "oklch(76.8% 0.110 132)",
+        "tonalRamp": [
+          "#040f00",
+          "#132b00",
+          "#264b00",
+          "#446a22",
+          "#668e46",
+          "#8fb178",
+          "#bed2b1",
+          "#eaf1e6"
+        ]
+      },
+      "syntax-apricot": {
+        "role": "tertiary",
+        "displayName": "Syntax Apricot",
+        "canonical": "oklch(72.7% 0.095 63)",
+        "tonalRamp": [
+          "#160700",
+          "#3a1b00",
+          "#613200",
+          "#82501a",
+          "#a87340",
+          "#c69b73",
+          "#dfc5ae",
+          "#f5ede6"
+        ]
+      },
+      "syntax-orchid": {
+        "role": "tertiary",
+        "displayName": "Syntax Orchid",
+        "canonical": "oklch(69.4% 0.164 318)",
+        "tonalRamp": [
+          "#16011d",
+          "#3a0448",
+          "#611075",
+          "#823698",
+          "#a85bbe",
+          "#c68ad8",
+          "#dfbcea",
+          "#f5eaf9"
+        ]
+      },
+      "syntax-sky": {
+        "role": "tertiary",
+        "displayName": "Syntax Sky",
+        "canonical": "oklch(73.0% 0.121 245)",
+        "tonalRamp": [
+          "#000c1f",
+          "#00254b",
+          "#00427a",
+          "#01629d",
+          "#3786c4",
+          "#70abdd",
+          "#aecfec",
+          "#e6f0f9"
+        ]
+      },
+      "syntax-comment": {
+        "role": "tertiary",
+        "displayName": "Syntax Comment",
+        "canonical": "oklch(49.8% 0.022 262)",
+        "tonalRamp": [
+          "#090b0f",
+          "#20242c",
+          "#39404c",
+          "#575e6b",
+          "#79808e",
+          "#9fa5b0",
+          "#c7cbd1",
+          "#edeef1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name inside the Home terminal; once per site. 2.25rem mobile to 3.75rem desktop."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles written as commands (ls -la ./projects, whoami)."
+      },
+      "role": {
+        "displayName": "Role",
+        "purpose": "Deploy Blue role line under the name."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Project card and detail titles."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "In-page section headings, preceded by a Deploy Blue >> or icon."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Mission and about prose; max ~42rem."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Card descriptions and log output."
+      },
+      "command": {
+        "displayName": "Command",
+        "purpose": "Nav links, button labels, prompts, chips."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase group labels (EXPLORER, CORE DEPENDENCIES, LANG:)."
+      },
+      "ascii": {
+        "displayName": "ASCII",
+        "purpose": "Only for ASCII architecture diagrams; the one true fixed-width face."
+      }
+    },
+    "shadows": [
+      {
+        "name": "window-float",
+        "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+        "purpose": "Only elements with window chrome: the hero terminal and modals."
+      },
+      {
+        "name": "floating-action",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "Fixed admin buttons floating over content."
+      },
+      {
+        "name": "deploy-glow",
+        "value": "0 0 20px rgba(25, 127, 230, 0.1)",
+        "purpose": "Project card hover (with 50% blue border); search prompt halo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "color-transition",
+        "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "All hover/active color and border changes."
+      },
+      {
+        "name": "route-fade",
+        "value": "opacity 200ms ease (out-in)",
+        "purpose": "Page transitions between routes."
+      },
+      {
+        "name": "cursor-blink",
+        "value": "1s step-end infinite",
+        "purpose": "Deploy Blue block cursor at the end of terminal transcripts."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single action color. Label is always a script name.",
+      "html": "<button class=\"ds-btn-primary\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9l3 3-3 3M13 15h4\"/></svg><span>./view_projects.sh</span></button>",
+      "css": ".ds-btn-primary{font-family:'Space Grotesk',monospace;display:inline-flex;align-items:center;gap:8px;background:#197fe6;color:#fff;font-size:14px;font-weight:700;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;transition:background-color .15s ease}.ds-btn-primary:hover{background:rgba(25,127,230,.9)}.ds-btn-primary:focus-visible{outline:2px solid #62a7fa;outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Graphite control; border turns Deploy Blue on hover.",
+      "html": "<button class=\"ds-btn-secondary\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M3 7l9 6 9-6\"/></svg><span>./contact_me.sh</span></button>",
+      "css": ".ds-btn-secondary{font-family:'Space Grotesk',monospace;display:inline-flex;align-items:center;gap:8px;background:#21262d;color:#d1d5db;font-size:14px;font-weight:700;padding:10px 20px;border:1px solid #30363d;border-radius:4px;cursor:pointer;transition:all .15s ease}.ds-btn-secondary:hover{border-color:#197fe6;color:#fff}.ds-btn-secondary:focus-visible{outline:2px solid #62a7fa;outline-offset:2px}"
+    },
+    {
+      "name": "Search Prompt",
+      "kind": "input",
+      "refersTo": "input-prompt",
+      "description": "Shell prompt input with green $ and an inset EXECUTE button.",
+      "html": "<div class=\"ds-prompt\"><span class=\"ds-prompt-sign\">$</span><input class=\"ds-prompt-input\" aria-label=\"Filter projects\" placeholder=\"grep --filter='kubernetes'...\"/><button class=\"ds-prompt-exec\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 5v14l11-7z\"/></svg>EXECUTE</button></div>",
+      "css": ".ds-prompt{font-family:'Space Grotesk',monospace;display:flex;align-items:center;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:4px;box-shadow:0 0 20px rgba(25,127,230,.1);max-width:640px;transition:border-color .15s ease}.ds-prompt:focus-within{border-color:rgba(25,127,230,.5)}.ds-prompt-sign{color:#4ade80;font-size:18px;padding:0 8px 0 16px}.ds-prompt-input{font-family:'Space Grotesk',monospace;flex:1;height:48px;background:transparent;border:none;outline:none;color:#fff;font-size:16px}.ds-prompt-input::placeholder{color:#4b5563}.ds-prompt-exec{font-family:'Space Grotesk',monospace;display:inline-flex;align-items:center;gap:8px;background:#197fe6;color:#fff;font-size:14px;font-weight:500;padding:8px 24px;border:none;border-radius:6px;cursor:pointer;transition:background-color .15s ease}.ds-prompt-exec:hover{background:#2563eb}.ds-prompt-exec:focus-visible{outline:2px solid #62a7fa;outline-offset:2px}"
+    },
+    {
+      "name": "Flag Filter Chips",
+      "kind": "chip",
+      "refersTo": "chip-flag",
+      "description": "Filters written as CLI flags; active state is a blue tint.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-active\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8 12l3 3 5-6\"/></svg>--all</button><button class=\"ds-chip\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 4.25 4.25 0 0 0 7 18z\"/></svg>--aws</button><button class=\"ds-chip\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 4.25 4.25 0 0 0 7 18z\"/></svg>--azure</button></div>",
+      "css": ".ds-chips{display:flex;flex-wrap:wrap;gap:12px}.ds-chip{font-family:'Space Grotesk',monospace;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;font-size:14px;border-radius:4px;background:#0d1117;border:1px solid #30363d;color:#9ca3af;cursor:pointer;transition:all .15s ease}.ds-chip:hover{border-color:#6b7280;color:#fff}.ds-chip-active{background:rgba(25,127,230,.2);border-color:#197fe6;color:#197fe6}.ds-chip-active:hover{background:#197fe6;color:#fff;border-color:#197fe6}.ds-chip:focus-visible{outline:2px solid #62a7fa;outline-offset:2px}"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sticky translucent header; links are shell commands.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9l3 3-3 3M13 15h4\"/></svg><span>~/devops_portfolio</span></a><div class=\"ds-nav-links\"><a class=\"ds-nav-link ds-nav-active\" href=\"#\">cd /about</a><a class=\"ds-nav-link\" href=\"#\">cd /projects</a><a class=\"ds-nav-link\" href=\"#\">cd /blog</a><a class=\"ds-nav-link\" href=\"#\">cat cv.pdf</a></div><div class=\"ds-lang\"><span class=\"ds-lang-k\">LANG:</span><span class=\"ds-lang-c\">lang --set</span><span class=\"ds-lang-v\">es</span></div></nav>",
+      "css": ".ds-nav{font-family:'Space Grotesk',monospace;display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px;padding:0 24px;background:rgba(17,25,33,.95);border-bottom:1px solid #30363d}.ds-nav-brand{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:18px;text-decoration:none;letter-spacing:-.025em}.ds-nav-brand svg{color:#197fe6;width:22px;height:22px}.ds-nav-links{display:flex;gap:24px}.ds-nav-link{color:#d1d5db;font-size:14px;font-weight:500;text-decoration:none;transition:color .15s ease}.ds-nav-link:hover,.ds-nav-active{color:#197fe6}.ds-nav-link:focus-visible{outline:2px solid #62a7fa;outline-offset:4px;border-radius:2px}.ds-lang{display:flex;align-items:center;gap:6px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:6px 12px}.ds-lang-k{font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.1em}.ds-lang-c{font-size:12px;color:#4ade80}.ds-lang-v{font-size:12px;color:#fff}"
+    },
+    {
+      "name": "Terminal Window",
+      "kind": "custom",
+      "refersTo": "window",
+      "description": "Signature hero: window chrome, prompt transcript, blinking Deploy Blue cursor.",
+      "html": "<div class=\"ds-term\"><div class=\"ds-term-bar\"><span class=\"ds-dot\" style=\"background:#ff5f56\"></span><span class=\"ds-dot\" style=\"background:#ffbd2e\"></span><span class=\"ds-dot\" style=\"background:#27c93f\"></span><span class=\"ds-term-title\">pablo@portfolio:~</span></div><div class=\"ds-term-body\"><p><span class=\"ds-ps\">pablo@portfolio:~$</span> <span class=\"ds-cmd\">./init_system.sh --verbose</span></p><p class=\"ds-out\">&gt; Loading kernel modules... <span class=\"ds-ok\">Done</span></p><p><span class=\"ds-ps\">pablo@portfolio:~$</span> <span class=\"ds-cmd\">echo $NAME</span></p><p class=\"ds-name\">Pablo Pan</p><p class=\"ds-role\">&lt;Cloud Architect /&gt;</p><p><span class=\"ds-ps\">pablo@portfolio:~$</span> <span class=\"ds-cursor\"></span></p></div></div>",
+      "css": ".ds-term{font-family:'Space Grotesk',monospace;background:#0d1117;border:1px solid #30363d;border-radius:12px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);max-width:560px}.ds-term-bar{position:relative;display:flex;gap:8px;align-items:center;padding:12px 16px;background:#161b22;border-bottom:1px solid #30363d}.ds-dot{width:12px;height:12px;border-radius:9999px;display:inline-block}.ds-term-title{position:absolute;left:50%;transform:translateX(-50%);font-size:12px;color:#6b7280}.ds-term-body{padding:24px;font-size:14px;color:#c9d1d9}.ds-term-body p{margin:0 0 10px}.ds-ps{color:#4ade80}.ds-cmd{color:#fff}.ds-out{color:#9ca3af;font-size:13px}.ds-ok{color:#4ade80}.ds-name{color:#fff;font-size:40px;font-weight:900;letter-spacing:-.025em;line-height:1}.ds-role{color:#197fe6;font-size:20px;font-weight:700}.ds-cursor{display:inline-block;width:12px;height:20px;background:#197fe6;vertical-align:middle;animation:ds-blink 1s step-end infinite}@keyframes ds-blink{0%,100%{opacity:1}50%{opacity:0}}@media (prefers-reduced-motion:reduce){.ds-cursor{animation:none}}"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "card-project",
+      "description": "Flat pane; blue border and Deploy glow on hover.",
+      "html": "<article class=\"ds-card\" tabindex=\"0\"><span class=\"ds-ctx\">terraform-aws-cluster</span><h4 class=\"ds-card-title\">Kubernetes Auto-Scaler</h4><p class=\"ds-card-desc\">Highly available Kubernetes cluster on AWS with Terraform and Ansible.</p><div class=\"ds-tags\"><span class=\"ds-tag\">Terraform</span><span class=\"ds-tag\">AWS EKS</span><span class=\"ds-tag\">Ansible</span></div></article>",
+      "css": ".ds-card{font-family:'Space Grotesk',monospace;max-width:380px;background:#0d1117;border:1px solid #30363d;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:all .15s ease}.ds-card:hover,.ds-card:focus-visible{border-color:rgba(25,127,230,.5);box-shadow:0 0 20px rgba(25,127,230,.1);outline:none}.ds-ctx{width:fit-content;font-size:12px;color:#197fe6;background:rgba(25,127,230,.1);padding:4px 8px;border-radius:4px}.ds-card-title{margin:0;color:#fff;font-size:22px;font-weight:700;transition:color .15s ease}.ds-card:hover .ds-card-title{color:#197fe6}.ds-card-desc{margin:0;color:#9ca3af;font-size:14px;line-height:1.625}.ds-tags{display:flex;flex-wrap:wrap;gap:8px}.ds-tag{font-size:12px;color:#9ca3af;background:#161b22;border:1px solid #30363d;padding:4px 8px;border-radius:4px}"
+    },
+    {
+      "name": "IDE Explorer",
+      "kind": "nav",
+      "refersTo": "explorer-item",
+      "description": "About-page file tree; active file gets a blue left rule.",
+      "html": "<aside class=\"ds-exp\"><div class=\"ds-exp-h\">Explorer</div><a class=\"ds-exp-row\" href=\"#\"><span style=\"color:#e37933\">&lt;/&gt;</span>home.html</a><a class=\"ds-exp-row ds-exp-active\" href=\"#\"><span style=\"color:#42a5f5\">&#9632;</span>about-me.md</a><a class=\"ds-exp-row\" href=\"#\"><span style=\"color:#fbc02d\">{ }</span>skills.json</a></aside>",
+      "css": ".ds-exp{font-family:'Space Grotesk',monospace;width:256px;background:#111418;border-right:1px solid #293038;padding-bottom:8px}.ds-exp-h{padding:12px;font-size:12px;font-weight:700;color:#9dabb8;text-transform:uppercase;letter-spacing:.05em}.ds-exp-row{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 32px;font-size:14px;color:#9dabb8;text-decoration:none;border-left:2px solid transparent;transition:all .15s ease}.ds-exp-row span{font-size:11px;width:18px}.ds-exp-row:hover{background:#1c242e;color:#fff;border-left-color:rgba(25,127,230,.5)}.ds-exp-active{background:#1c242e;color:#fff;border-left-color:#197fe6}.ds-exp-row:focus-visible{outline:2px solid #62a7fa;outline-offset:-2px}"
+    },
+    {
+      "name": "Status Bar",
+      "kind": "custom",
+      "refersTo": "window-titlebar",
+      "description": "Footer pill styled as an editor status bar.",
+      "html": "<div class=\"ds-status\"><span><i class=\"ds-live\"></i>Online</span><b></b><span>UTF-8</span><b></b><span class=\"ds-loc\">es_ES</span><b></b><span>main</span></div>",
+      "css": ".ds-status{font-family:'Space Grotesk',monospace;display:inline-flex;align-items:center;gap:16px;font-size:12px;color:#6b7280;background:#161b22;border:1px solid #30363d;border-radius:9999px;padding:8px 16px}.ds-status span{display:inline-flex;align-items:center;gap:6px}.ds-status b{width:1px;height:12px;background:#374151}.ds-live{width:8px;height:8px;border-radius:9999px;background:#22c55e;display:inline-block}.ds-loc{color:#197fe6}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineer's Workstation",
+    "overview": "The site is one developer desktop, seen at night. Every page is a tool an engineer would really have open: Home is a terminal window running a boot script, About is an IDE with a file explorer and tabs (`about-me.md`, `skills.json`), and Projects is a shell prompt where you `grep` and pass `--flags`. Navigation reads as shell commands (`cd /projects`, `cat cv.pdf`, `./login.sh`), and the footer is an editor status bar (`Online | UTF-8 | es_ES | main`). The metaphor holds because each piece behaves like the real tool, not because it's decorated like one.\n\nDensity is moderate and calm. Wide, dark fields of page-night surround bordered panes of console-black, and the content sits in those panes the way output sits in a terminal. One blue does nearly all the signalling; prompt green marks the shell's own voice. Personality lives in the copy and labels, which are command-style and witty. The shapes and states are strict and utilitarian, like well-made dev tools.\n\nThe system is dark only. It rejects the generic SaaS landing page: no gradient hero, no stock illustration, no \"trusted by\" logo strip.",
+    "keyCharacteristics": [
+      "Workstation metaphor: terminal, IDE, and shell, each used where it fits the content.",
+      "Dark only. Layers of near-black blue-grey separated by 1px hairlines.",
+      "One action color (Deploy Blue), one shell color (Prompt Green), plus a One Dark-style syntax palette for code-like content.",
+      "Space Grotesk everywhere, set like a terminal font.",
+      "Command-style microcopy on every control: `./view_projects.sh`, `--all`, `EXECUTE`.",
+      "Window chrome (traffic lights, title bar) marks things that are \"windows\"; flat panes are everything else."
+    ],
+    "rules": [
+      {
+        "name": "The One Blue Rule",
+        "body": "Deploy Blue is the only color that means \"you can act here\". Green belongs to the shell, the syntax colors belong to code, and neither ever becomes a button.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Structure comes from 1px Hairline borders on Console Black, not from fills or shadows. If two panes need separating, give them a border.",
+        "section": "colors"
+      },
+      {
+        "name": "The Command Label Rule",
+        "body": "Interactive labels are written as commands, scripts, or flags (`./contact_me.sh`, `--kubernetes`, `cd /about`). Shapes stay strict, so the copy carries the wit.",
+        "section": "typography"
+      },
+      {
+        "name": "The Window Rule",
+        "body": "Only elements with window chrome (traffic lights or a title bar) get the window float shadow. A card is a pane, not a window.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do build each new surface as a tool from the workstation: a terminal transcript, an editor file, or a shell command. Pick whichever fits the content.",
+      "Do write every interactive label as a command, script, path, or flag, and translate it in all four locales.",
+      "Do separate panes with 1px Hairline (`#30363d`) borders on Console Black (`#0d1117`) over Page Night (`#111921`).",
+      "Do reserve Deploy Blue (`#197fe6`) for action, focus, active state, and heading markers.",
+      "Do use Prompt Green (`#4ade80`) only for prompts, `$` markers, and success output.",
+      "Do put window chrome (traffic lights + title bar) and the Window float shadow only on true windows: the hero terminal and modals.",
+      "Do color code-like data with the syntax palette, never UI controls."
+    ],
+    "donts": [
+      "Don't add a light mode. The workstation is dark only.",
+      "Don't drift into a generic SaaS landing page: no gradient hero, no stock illustration, no \"trusted by\" logo strips.",
+      "Don't add a second action color, or make green or a syntax hue clickable.",
+      "Don't give flat cards the Window float shadow or fake window chrome.",
+      "Don't use rounding above 12px on containers, or pill-shaped buttons.",
+      "Don't add lift/scale hover motion. State changes are color and border transitions (~150ms), plus the 200ms route fade.",
+      "Don't assume `font-mono` means fixed-width. It is Space Grotesk; only ASCII diagrams use a real monospace face."
+    ]
+  }
+}

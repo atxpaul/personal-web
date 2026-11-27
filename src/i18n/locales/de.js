@@ -58,9 +58,49 @@ export default {
     },
     projects: {
         latestDeployment: 'Latest Deployment',
+        subtitleDefault:
+            'Lösungen rund um Infrastructure as Code, Container-Orchestrierung und Automatisierungs-Pipelines.',
+        searchLabel: 'Projekte nach Name, Beschreibung oder Technologie filtern',
+        moreRepositories: 'Weitere Repositories',
+        noResults: 'Keine Projekte entsprechen den aktuellen Filtern.',
+        clearFilters: 'Filter zurücksetzen',
+        empty: 'Noch keine Projekte veröffentlicht.',
+        viewCode: 'Code ansehen',
+        loadingList: 'Projekte werden geladen...',
+        loadingProject: 'Projekt wird geladen...',
+        relatedLogs: 'Verwandte Logs',
+        notFound: 'Es gibt kein Projekt mit dieser ID. Es wurde möglicherweise umbenannt oder entfernt.',
+        loadError: 'Das Projekt konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.',
+        filterLabel: 'Nach Technologie filtern',
+    },
+    common: {
+        loading: 'Wird geladen...',
+        retry: './retry.sh',
+        close: 'Schließen',
+    },
+    blog: {
+        comingSoon: 'Noch keine Beiträge. Technische Artikel sind in Arbeit.',
+    },
+    notFound: {
+        title: 'command not found',
+        body: 'Diese Seite existiert nicht. Der Link ist vielleicht veraltet oder fehlerhaft.',
+        home: 'cd ~',
+        projects: 'cd /projects',
+    },
+    login: {
+        subtitle: 'Mit deinem Google-Konto anmelden',
+        cancel: 'Abbrechen',
+        google: 'Weiter mit Google',
+        loading: 'Anmeldung läuft...',
+    },
+    header: {
+        language: 'Sprache',
+        menu: 'Navigation ein- oder ausblenden',
     },
     footer: {
-        copyright: '© 2026 Pablo Pan Portfolio. Built with Tailwind CSS.',
+        copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
+        localStorageNotice:
+            'Wir verwenden den lokalen Speicher, um deine Sprache zu merken.',
         online: 'Online',
         encoding: 'UTF-8',
         locale: 'de_DE',

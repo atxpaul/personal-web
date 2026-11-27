@@ -30,9 +30,11 @@
                         </div>
                         <button
                             @click="close"
+                            type="button"
+                            :aria-label="$t('common.close')"
                             class="text-gray-500 hover:text-white transition-colors"
                         >
-                            <span class="material-symbols-outlined text-lg"
+                            <span aria-hidden="true" class="material-symbols-outlined text-lg"
                                 >close</span
                             >
                         </button>
@@ -105,11 +107,13 @@
                                     class="flex-1 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
                                     <span
+                                        aria-hidden="true"
                                         v-if="loading"
                                         class="material-symbols-outlined text-[18px] animate-spin"
                                         >sync</span
                                     >
                                     <span
+                                        aria-hidden="true"
                                         v-else
                                         class="material-symbols-outlined text-[18px]"
                                         >save</span

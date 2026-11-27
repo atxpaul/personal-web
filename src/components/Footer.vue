@@ -14,6 +14,7 @@
                         rel="noopener noreferrer"
                     >
                         <span
+                            aria-hidden="true"
                             class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors"
                         >
                             {{ getIcon(key) }}
@@ -37,14 +38,14 @@
                     <span>{{ $t('footer.encoding') }}</span>
                     <span class="w-px h-3 bg-gray-700"></span>
                     <span class="flex items-center gap-1 text-primary">
-                        <span class="material-symbols-outlined text-[14px]"
+                        <span aria-hidden="true" class="material-symbols-outlined text-[14px]"
                             >language</span
                         >
                         {{ $t('footer.locale') }}
                     </span>
                     <span class="w-px h-3 bg-gray-700"></span>
                     <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]"
+                        <span aria-hidden="true" class="material-symbols-outlined text-[14px]"
                             >call_split</span
                         >
                         {{ $t('footer.branch') }}
@@ -57,7 +58,7 @@
                     {{ $t('footer.localStorageNotice') }}
                 </p>
                 <p class="text-xs text-gray-600">
-                    {{ $t('footer.copyright') }}
+                    {{ $t('footer.copyright', { year: new Date().getFullYear() }) }}
                 </p>
             </div>
         </div>

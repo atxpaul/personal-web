@@ -12,14 +12,20 @@
                     @click="handleEditClick"
                     class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white text-sm font-bold py-3 px-4 rounded-lg transition-colors flex items-center gap-2 shadow-lg z-50"
                 >
-                    <span class="material-symbols-outlined text-lg">edit</span>
+                    <span aria-hidden="true" class="material-symbols-outlined text-lg">edit</span>
                     <span>Editar</span>
                 </button>
             </AdminOnly>
             <!-- Tab Bar (Simulated) -->
-            <div class="flex h-9 bg-[#111418] border-b border-[#293038]">
-                <div
-                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px]"
+            <div
+                class="flex h-9 bg-[#111418] border-b border-[#293038] overflow-x-auto"
+                role="tablist"
+            >
+                <button
+                    type="button"
+                    role="tab"
+                    :aria-selected="activeTab === 'about'"
+                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px] shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
                     :class="
                         activeTab === 'about'
                             ? 'border-t-2 border-b border-t-primary border-b-[#111418] border-r-[#293038] bg-[#111418] text-white'
@@ -28,17 +34,22 @@
                     @click="activeTab = 'about'"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#42a5f5]"
                         >description</span
                     >
                     <span>about-me.md</span>
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-sm ml-auto text-[#9dabb8] hover:text-white"
                         >close</span
                     >
-                </div>
-                <div
-                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px]"
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    :aria-selected="activeTab === 'skills'"
+                    class="flex items-center gap-2 px-4 border-r text-sm cursor-pointer min-w-[140px] shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
                     :class="
                         activeTab === 'skills'
                             ? 'border-t-2 border-b border-t-primary border-b-[#111418] border-r-[#293038] bg-[#111418] text-white'
@@ -47,15 +58,17 @@
                     @click="activeTab = 'skills'"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#fbc02d]"
                         >data_object</span
                     >
                     <span>skills.json</span>
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-sm ml-auto text-[#9dabb8] hover:text-white"
                         >close</span
                     >
-                </div>
+                </button>
             </div>
 
             <!-- Scrollable Content -->
@@ -165,6 +178,7 @@
                                         "
                                     ></div>
                                     <span
+                                        aria-hidden="true"
                                         class="material-symbols-outlined text-6xl text-[#9dabb8]"
                                         >terminal</span
                                     >
@@ -183,6 +197,7 @@
                                 class="text-white text-lg font-bold mb-4 flex items-center gap-2"
                             >
                                 <span
+                                    aria-hidden="true"
                                     class="material-symbols-outlined text-primary"
                                     >bar_chart</span
                                 >
@@ -207,6 +222,7 @@
                                             }}
                                         </p>
                                         <span
+                                            aria-hidden="true"
                                             class="material-symbols-outlined text-sm"
                                             :class="metric.iconColor"
                                         >
@@ -223,6 +239,7 @@
                                         :class="metric.statusColor"
                                     >
                                         <span
+                                            aria-hidden="true"
                                             class="material-symbols-outlined text-xs"
                                         >
                                             {{ metric.statusIcon }}
@@ -244,6 +261,7 @@
                                     class="text-white text-lg font-bold flex items-center gap-2"
                                 >
                                     <span
+                                        aria-hidden="true"
                                         class="material-symbols-outlined text-primary"
                                         >extension</span
                                     >
@@ -256,6 +274,7 @@
                                         title="Editar tech stack"
                                     >
                                         <span
+                                            aria-hidden="true"
                                             class="material-symbols-outlined text-[16px]"
                                             >edit</span
                                         >
@@ -511,10 +530,15 @@ const highlightJsonLine = (line) => {
 };
 
 // Cargar datos de About desde Firestore con fallback a static
+// Si el idioma cambia a mitad de una carga, la respuesta antigua se descarta
+let aboutRequest = 0;
+
 const loadAboutMeData = async () => {
+    const requestId = ++aboutRequest;
     try {
         // Intentar cargar desde Firestore
         const firestoreData = await getAboutMe(locale.value);
+        if (requestId !== aboutRequest) return;
         if (firestoreData) {
             aboutMeData.value = firestoreData;
             // Actualizar los refs locales con los datos de Firestore
@@ -529,6 +553,8 @@ const loadAboutMeData = async () => {
     } catch (err) {
         console.warn('Error loading from Firestore, using static data:', err);
     }
+
+    if (requestId !== aboutRequest) return;
 
     // Fallback a datos estáticos
     const contact = await getContactInfo();

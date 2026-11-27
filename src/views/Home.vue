@@ -11,34 +11,37 @@
                     @click="showEditModal = true"
                     class="absolute bottom-4 right-4 bg-primary hover:bg-primary/90 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors flex items-center gap-1.5 z-10 shadow-lg"
                 >
-                    <span class="material-symbols-outlined text-sm">edit</span>
+                    <span aria-hidden="true" class="material-symbols-outlined text-sm">edit</span>
                     <span>Editar</span>
                 </button>
             </AdminOnly>
         </div>
 
-        <div class="w-full max-w-5xl mt-12 mb-8">
+        <!-- Proyecto destacado: se oculta entero si no hay ninguno -->
+        <section
+            v-if="loading || project"
+            class="w-full max-w-5xl mt-12 mb-8"
+            :aria-busy="loading"
+        >
             <div class="flex items-center gap-2 mb-6">
-                <span class="text-primary font-bold text-lg">&gt;&gt;</span>
-                <h3 class="text-white text-xl font-bold">{{
+                <span class="text-primary font-bold text-lg" aria-hidden="true"
+                    >&gt;&gt;</span
+                >
+                <h2 class="text-white text-xl font-bold">{{
                     $t('projects.latestDeployment')
-                }}</h3>
+                }}</h2>
             </div>
 
-            <ProjectCard
-                v-if="project"
-                :project="project"
-                @view-source="handleViewSource"
-            />
+            <ProjectCard v-if="project" :project="project" />
 
-            <div v-if="loading" class="text-center text-gray-500 py-8">
-                Loading...
-            </div>
-
-            <div v-if="error" class="text-center text-red-500 py-8">
-                {{ error }}
-            </div>
-        </div>
+            <p
+                v-else
+                role="status"
+                class="font-mono text-sm text-gray-500 py-8 text-center"
+            >
+                {{ $t('common.loading') }}
+            </p>
+        </section>
 
         <!-- Modal de edición -->
         <EditConfigModal
@@ -51,93 +54,73 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Terminal from '../components/Terminal.vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import EditConfigModal from '../components/EditConfigModal.vue';
 import AdminOnly from '../components/AdminOnly.vue';
-import { useAdmin } from '../composables/useAuth.js';
 import {
     getSiteConfig,
     getProjects as getFirestoreProjects,
 } from '../data/firestore.js';
-import {
-    getProfileData,
-    getProjects as getStaticProjects,
-} from '../data/static.js';
+import { getProjects as getStaticProjects } from '../data/static.js';
 
 const { locale } = useI18n();
-const { isAdmin } = useAdmin();
 const showEditModal = ref(false);
 const profile = ref(null);
 const project = ref(null);
 const loading = ref(true);
-const error = ref(null);
 
-// Cargar datos de Firestore con fallback a static
+// Cada carga recibe un número; si el idioma cambia a mitad de una carga,
+// la respuesta antigua se descarta en lugar de pisar a la nueva.
+let profileRequest = 0;
+let projectRequest = 0;
+
+// Perfil desde Firestore. Si no hay datos, profile queda en null y el
+// Terminal muestra los textos traducidos de i18n (en el idioma del visitante).
 const loadProfileData = async () => {
+    const requestId = ++profileRequest;
+    let data = null;
     try {
-        // Intentar cargar desde Firestore
-        const firestoreData = await getSiteConfig(locale.value);
-        if (firestoreData) {
-            profile.value = firestoreData;
-            return;
-        }
+        data = await getSiteConfig(locale.value);
     } catch (err) {
-        console.warn('Error loading from Firestore, using static data:', err);
+        console.warn('Error loading site config from Firestore:', err);
     }
-
-    // Fallback a datos estáticos
-    const staticData = await getProfileData();
-    if (staticData) {
-        profile.value = staticData;
+    if (requestId === profileRequest) {
+        profile.value = data || null;
     }
 };
 
-// Cargar proyecto destacado desde Firestore con fallback a static
+// Proyecto destacado desde Firestore con fallback a static
 const loadFeaturedProject = async () => {
+    const requestId = ++projectRequest;
+    loading.value = true;
+    let featured = null;
+
     try {
-        loading.value = true;
-        error.value = null;
-
-        // Intentar cargar desde Firestore
-        let projects = [];
-        try {
-            projects = await getFirestoreProjects(locale.value);
-            if (projects && projects.length > 0) {
-                // Buscar el proyecto destacado
-                const featured = projects.find((p) => p.featured) || null;
-                if (featured) {
-                    project.value = featured;
-                    loading.value = false;
-                    return;
-                }
-            }
-        } catch (err) {
-            console.warn(
-                'Error loading from Firestore, trying static data:',
-                err,
-            );
-        }
-
-        // Fallback a datos estáticos
-        const staticProjects = await getStaticProjects();
-        if (staticProjects && staticProjects.length > 0) {
-            const featured = staticProjects.find((p) => p.featured) || null;
-            if (featured) {
-                project.value = featured;
-            }
-        }
+        const projects = await getFirestoreProjects(locale.value);
+        featured = projects?.find((p) => p.featured) || null;
     } catch (err) {
-        error.value = err.message || 'Error loading featured project';
-        console.error('Error loading featured project:', err);
-    } finally {
+        console.warn('Error loading from Firestore, trying static data:', err);
+    }
+
+    if (!featured) {
+        try {
+            const staticProjects = await getStaticProjects();
+            featured = staticProjects?.find((p) => p.featured) || null;
+        } catch (err) {
+            console.error('Error loading featured project:', err);
+        }
+    }
+
+    if (requestId === projectRequest) {
+        project.value = featured;
         loading.value = false;
     }
 };
 
-// Cargar datos cuando cambia el idioma
+// Carga inicial y recarga cuando cambia el idioma
 watch(
     locale,
     () => {
@@ -148,18 +131,6 @@ watch(
 );
 
 const handleConfigSaved = () => {
-    // Recargar datos después de guardar
     loadProfileData();
 };
-
-const handleViewSource = (project) => {
-    if (project.github) {
-        window.open(project.github, '_blank', 'noopener,noreferrer');
-    }
-};
-
-onMounted(async () => {
-    await loadProfileData();
-    await loadFeaturedProject();
-});
 </script>

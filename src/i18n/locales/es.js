@@ -58,9 +58,47 @@ export default {
     },
     projects: {
         latestDeployment: 'Latest Deployment',
+        subtitleDefault:
+            'Explorando soluciones de infraestructura como código, orquestación de contenedores y pipelines de automatización.',
+        searchLabel: 'Filtrar proyectos por nombre, descripción o tecnología',
+        moreRepositories: 'Más repositorios',
+        noResults: 'No se encontraron proyectos con los filtros seleccionados.',
+        clearFilters: 'Limpiar filtros',
+        empty: 'Todavía no hay proyectos publicados.',
+        viewCode: 'Ver código',
+        loadingList: 'Cargando proyectos...',
+        loadingProject: 'Cargando proyecto...',
+        relatedLogs: 'Logs relacionados',
+        notFound: 'No existe ningún proyecto con este ID. Puede que se haya renombrado o eliminado.',
+        loadError: 'No se pudo cargar el proyecto. Revisa tu conexión e inténtalo de nuevo.',
+        filterLabel: 'Filtrar por tecnología',
+    },
+    common: {
+        loading: 'Cargando...',
+        retry: './retry.sh',
+        close: 'Cerrar',
+    },
+    blog: {
+        comingSoon: 'Aún no hay artículos. Los textos técnicos están en camino.',
+    },
+    notFound: {
+        title: 'command not found',
+        body: 'Esta página no existe. Puede que el enlace sea antiguo o tenga un error.',
+        home: 'cd ~',
+        projects: 'cd /projects',
+    },
+    login: {
+        subtitle: 'Inicia sesión con tu cuenta de Google',
+        cancel: 'Cancelar',
+        google: 'Continuar con Google',
+        loading: 'Iniciando sesión...',
+    },
+    header: {
+        language: 'Idioma',
+        menu: 'Abrir o cerrar navegación',
     },
     footer: {
-        copyright: '© 2026 Pablo Pan Portfolio. Built with Tailwind CSS.',
+        copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
         localStorageNotice:
             'Usamos almacenamiento local para recordar tu idioma.',
         online: 'Online',
