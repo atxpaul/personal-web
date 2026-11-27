@@ -39,7 +39,7 @@ export default {
         },
     },
     terminal: {
-        prompt: 'pablo@portfolio:~$',
+        prompt: "pablo{'@'}portfolio:~$", // @ escapado: en vue-i18n inicia un mensaje enlazado (@:clave)
         initCommand: './init_system.sh --verbose',
         initOutput: {
             loading: 'Loading kernel modules...',
