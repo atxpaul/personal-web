@@ -1,15 +1,41 @@
 import {
     doc,
-    getDoc,
+    getDoc as firestoreGetDoc,
     setDoc,
     updateDoc,
     deleteDoc,
     collection,
-    getDocs,
+    getDocs as firestoreGetDocs,
     query,
     where,
 } from 'firebase/firestore';
 import { db } from '../config/firebase.js';
+
+// Si Firestore no responde (sin conexión, bloqueado por la red), el SDK
+// reintenta durante mucho tiempo y la página se queda en "Cargando...".
+// Cortamos cada lectura a los 8 s para que las vistas usen los datos estáticos.
+const READ_TIMEOUT_MS = 8000;
+
+const withTimeout = (promise) =>
+    new Promise((resolve, reject) => {
+        const timer = setTimeout(
+            () => reject(new Error('Firestore read timed out')),
+            READ_TIMEOUT_MS,
+        );
+        promise.then(
+            (value) => {
+                clearTimeout(timer);
+                resolve(value);
+            },
+            (err) => {
+                clearTimeout(timer);
+                reject(err);
+            },
+        );
+    });
+
+const getDoc = (ref) => withTimeout(firestoreGetDoc(ref));
+const getDocs = (q) => withTimeout(firestoreGetDocs(q));
 
 /**
  * Obtener configuración del sitio (site/config)
@@ -24,7 +50,7 @@ export const getSiteConfig = async (locale = 'es') => {
         if (docSnap.exists()) {
             const data = docSnap.data();
             // Retornar datos del idioma específico o datos por defecto
-            return data[locale] || data.es || null;
+            return data[locale] || data.en || data.es || null;
         }
         return null;
     } catch (error) {
@@ -90,7 +116,7 @@ export const getAboutMe = async (locale = 'es') => {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            return data[locale] || data.es || null;
+            return data[locale] || data.en || data.es || null;
         }
         return null;
     } catch (error) {
@@ -176,8 +202,8 @@ export const getProjectsSubtitle = async (locale = 'es') => {
             // Retornar subtítulo del idioma específico o del otro idioma, o null
             return (
                 data[locale]?.subtitle ||
-                data.es?.subtitle ||
                 data.en?.subtitle ||
+                data.es?.subtitle ||
                 null
             );
         }
@@ -355,7 +381,7 @@ export const getProjects = async (locale = 'es') => {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             // Obtener datos del idioma específico o datos por defecto
-            const projectData = data[locale] || data.es || {};
+            const projectData = data[locale] || data.en || data.es || {};
             projects.push({
                 id: doc.id,
                 // Campos comunes (no dependen del idioma)
@@ -395,7 +421,7 @@ export const getProjectById = async (projectId, locale = 'es') => {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            const projectData = data[locale] || data.es || {};
+            const projectData = data[locale] || data.en || data.es || {};
             return {
                 id: docSnap.id,
                 // Campos comunes

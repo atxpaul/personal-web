@@ -28,6 +28,12 @@ const routes = [
         name: 'Blog',
         component: () => import('../views/Blog.vue'), // Lazy load para más adelante
     },
+    {
+        // Cualquier otra URL: página 404 con estilo de terminal
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('../views/NotFound.vue'),
+    },
 ];
 
 const router = createRouter({

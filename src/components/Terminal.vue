@@ -11,12 +11,14 @@
                 <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
             </div>
             <div
-                class="text-xs text-gray-500 font-medium absolute left-1/2 transform -translate-x-1/2"
+                class="hidden sm:block text-xs text-gray-500 font-medium absolute left-1/2 transform -translate-x-1/2"
             >
                 pablo@portfolio:~
             </div>
             <div class="flex items-center gap-2 text-[10px] text-gray-500">
-                <span class="material-symbols-outlined text-[14px]"
+                <span
+                    class="material-symbols-outlined text-[14px]"
+                    aria-hidden="true"
                     >language</span
                 >
                 <span>LC_ALL={{ $t('footer.locale') }}.UTF-8</span>
@@ -64,7 +66,7 @@
                         $t('terminal.nameCommand')
                     }}</span>
                     <h1
-                        class="text-4xl md:text-6xl font-black text-white tracking-tight mt-2"
+                        class="text-4xl md:text-6xl font-black text-white tracking-tight mt-2 break-words [overflow-wrap:anywhere]"
                     >
                         {{ profile?.name || $t('terminal.name') }}
                     </h1>
@@ -97,19 +99,24 @@
                             to="/projects"
                             class="group bg-primary text-white hover:bg-primary/90 px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-all inline-flex"
                         >
-                            <span class="material-symbols-outlined text-sm"
+                            <span aria-hidden="true" class="material-symbols-outlined text-sm"
                                 >terminal</span
                             >
                             <span>{{ $t('terminal.viewProjects') }}</span>
                         </router-link>
-                        <button
-                            class="group border border-console-border hover:border-primary text-gray-300 hover:text-white bg-[#21262d] px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-all"
+                        <a
+                            :href="CONTACT_URL"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group border border-console-border hover:border-primary text-gray-300 hover:text-white bg-[#21262d] px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                         >
-                            <span class="material-symbols-outlined text-sm"
+                            <span
+                                class="material-symbols-outlined text-sm"
+                                aria-hidden="true"
                                 >mail</span
                             >
                             <span>{{ $t('terminal.contact') }}</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -124,6 +131,8 @@
 </template>
 
 <script setup>
+import { CONTACT_URL } from '../data/static.js';
+
 defineProps({
     profile: {
         type: Object,

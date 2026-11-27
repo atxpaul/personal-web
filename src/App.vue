@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue';
+import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
@@ -24,20 +24,13 @@ import { useData } from './composables/useData.js';
 const { locale } = useI18n();
 const { socialLinks } = useData();
 
-const setDocumentLang = (lang) => {
-    document.documentElement.lang = lang === 'es' ? 'es' : 'en';
-};
-
-onMounted(() => {
-    setDocumentLang(locale.value);
-});
-
+// Mantener <html lang> sincronizado con el idioma activo (es, en, de, fr)
 watch(
     locale,
     (newLocale) => {
-        setDocumentLang(newLocale);
+        document.documentElement.lang = newLocale;
     },
-    { immediate: false },
+    { immediate: true },
 );
 </script>
 

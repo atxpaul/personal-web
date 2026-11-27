@@ -58,9 +58,49 @@ export default {
     },
     projects: {
         latestDeployment: 'Latest Deployment',
+        subtitleDefault:
+            "Solutions d'infrastructure as code, d'orchestration de conteneurs et de pipelines d'automatisation.",
+        searchLabel: 'Filtrer les projets par nom, description ou technologie',
+        moreRepositories: 'Autres dépôts',
+        noResults: 'Aucun projet ne correspond aux filtres actuels.',
+        clearFilters: 'Réinitialiser les filtres',
+        empty: 'Aucun projet publié pour le moment.',
+        viewCode: 'Voir le code',
+        loadingList: 'Chargement des projets...',
+        loadingProject: 'Chargement du projet...',
+        relatedLogs: 'Logs associés',
+        notFound: "Aucun projet n'existe avec cet ID. Il a peut-être été renommé ou supprimé.",
+        loadError: 'Impossible de charger ce projet. Vérifiez votre connexion et réessayez.',
+        filterLabel: 'Filtrer par technologie',
+    },
+    common: {
+        loading: 'Chargement...',
+        retry: './retry.sh',
+        close: 'Fermer',
+    },
+    blog: {
+        comingSoon: 'Aucun article pour le moment. Des articles techniques arrivent bientôt.',
+    },
+    notFound: {
+        title: 'command not found',
+        body: "Cette page n'existe pas. Le lien est peut-être ancien ou mal saisi.",
+        home: 'cd ~',
+        projects: 'cd /projects',
+    },
+    login: {
+        subtitle: 'Connectez-vous avec votre compte Google',
+        cancel: 'Annuler',
+        google: 'Continuer avec Google',
+        loading: 'Connexion en cours...',
+    },
+    header: {
+        language: 'Langue',
+        menu: 'Afficher ou masquer la navigation',
     },
     footer: {
-        copyright: '© 2026 Pablo Pan Portfolio. Built with Tailwind CSS.',
+        copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
+        localStorageNotice:
+            'Nous utilisons le stockage local pour mémoriser votre langue.',
         online: 'Online',
         encoding: 'UTF-8',
         locale: 'fr_FR',

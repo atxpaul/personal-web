@@ -5,7 +5,7 @@
         <div
             class="p-3 text-xs font-bold text-[#9dabb8] uppercase tracking-wider flex items-center gap-2"
         >
-            <span class="material-symbols-outlined text-sm">expand_more</span>
+            <span aria-hidden="true" class="material-symbols-outlined text-sm">expand_more</span>
             EXPLORER
         </div>
 
@@ -13,7 +13,7 @@
             <div
                 class="flex items-center gap-2 px-4 py-1 text-[#9dabb8] hover:bg-[#1c242e] cursor-pointer"
             >
-                <span class="material-symbols-outlined text-base text-[#9dabb8]"
+                <span aria-hidden="true" class="material-symbols-outlined text-base text-[#9dabb8]"
                     >folder</span
                 >
                 <span class="text-sm">.github</span>
@@ -23,6 +23,7 @@
                 class="flex items-center gap-2 px-4 py-1 text-[#9dabb8] hover:bg-[#1c242e] cursor-pointer"
             >
                 <span
+                    aria-hidden="true"
                     class="material-symbols-outlined text-base"
                     :class="isSrcOpen ? 'text-primary' : 'text-[#9dabb8]'"
                 >
@@ -47,6 +48,7 @@
                     }"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#e37933]"
                         >html</span
                     >
@@ -63,6 +65,7 @@
                     }"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#42a5f5]"
                         >description</span
                     >
@@ -79,6 +82,7 @@
                     }"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#fbc02d]"
                         >data_object</span
                     >
@@ -94,6 +98,7 @@
                     }"
                 >
                     <span
+                        aria-hidden="true"
                         class="material-symbols-outlined text-base text-[#9dabb8]"
                         >folder</span
                     >
@@ -104,7 +109,7 @@
             <div
                 class="flex items-center gap-2 px-4 py-1 mt-2 text-[#9dabb8] hover:bg-[#1c242e] cursor-pointer"
             >
-                <span class="material-symbols-outlined text-base"
+                <span aria-hidden="true" class="material-symbols-outlined text-base"
                     >description</span
                 >
                 <span class="text-sm">Dockerfile</span>
@@ -113,7 +118,7 @@
             <div
                 class="flex items-center gap-2 px-4 py-1 text-[#9dabb8] hover:bg-[#1c242e] cursor-pointer"
             >
-                <span class="material-symbols-outlined text-base"
+                <span aria-hidden="true" class="material-symbols-outlined text-base"
                     >settings</span
                 >
                 <span class="text-sm">compose.yaml</span>

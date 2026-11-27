@@ -20,12 +20,15 @@ export const getLatestProject = async () => {
     };
 };
 
+// Destino del botón ./contact_me.sh (no hay email real publicado todavía)
+export const CONTACT_URL = 'https://linkedin.com/in/pablo-pan-veira';
+
 export const getSocialLinks = async () => {
     // En producción: return await fetch('/api/social').then(r => r.json())
 
     return {
         github: 'https://github.com/atxpaul',
-        linkedin: 'https://linkedin.com/in/pablo-pan-veira',
+        linkedin: CONTACT_URL,
         // gitlab: '#',
         // stackoverflow: '#'
     };

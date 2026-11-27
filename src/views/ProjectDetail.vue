@@ -3,21 +3,22 @@
         class="flex-grow flex flex-col items-center py-8 px-4 md:px-10 lg:px-20"
     >
         <!-- Breadcrumb -->
-        <div
-            class="w-full max-w-6xl mb-6 flex items-center gap-2 font-mono text-sm text-gray-500"
+        <nav
+            class="w-full max-w-6xl mb-6 flex items-center gap-2 font-mono text-sm text-gray-500 min-w-0"
+            aria-label="Breadcrumb"
         >
             <router-link
                 to="/projects"
-                class="hover:text-primary transition-colors flex items-center gap-1"
+                class="hover:text-primary transition-colors flex items-center gap-1 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-                <span class="material-symbols-outlined text-base"
+                <span aria-hidden="true" class="material-symbols-outlined text-base"
                     >arrow_back</span
                 >
                 cd ..
             </router-link>
-            <span>/</span>
-            <span class="text-white">{{ project?.id || 'loading' }}.yml</span>
-        </div>
+            <span aria-hidden="true">/</span>
+            <span class="text-white truncate min-w-0">{{ route.params.id }}.yml</span>
+        </nav>
 
         <!-- Project Detail Card -->
         <div
@@ -38,15 +39,22 @@
                         class="flex items-center bg-console-bg border-t border-x border-console-border rounded-t px-3 py-1 text-xs text-gray-300 font-mono relative top-[5px]"
                     >
                         <span
+                            aria-hidden="true"
                             class="material-symbols-outlined text-[14px] mr-2 text-yellow-500"
                             >description</span
                         >
                         project_detail.yml
-                        <span
-                            @click="goBack"
-                            class="ml-2 hover:text-white cursor-pointer"
-                            >×</span
+                        <router-link
+                            to="/projects"
+                            class="ml-2 flex items-center hover:text-white rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                            :aria-label="$t('common.close')"
                         >
+                            <span
+                                aria-hidden="true"
+                                class="material-symbols-outlined text-[14px]"
+                                >close</span
+                            >
+                        </router-link>
                     </div>
                 </div>
                 <div class="text-xs font-mono text-gray-500">vim</div>
@@ -129,6 +137,7 @@
                             >
                                 <span class="text-gray-500">-</span>
                                 <span
+                                    aria-hidden="true"
                                     class="material-symbols-outlined text-[16px] text-primary"
                                     >{{ tech.icon || 'dns' }}</span
                                 >
@@ -166,13 +175,16 @@
                         <div class="pl-4 mt-2 flex flex-wrap gap-4">
                             <a
                                 v-if="project.github"
-                                @click.prevent="openGitHub(project.github)"
-                                class="group relative inline-flex items-center gap-2 px-4 py-2 bg-[#161b22] border border-console-border rounded hover:border-primary hover:text-white text-gray-300 transition-all cursor-pointer"
+                                :href="project.github"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="group relative inline-flex items-center gap-2 px-4 py-2 bg-[#161b22] border border-console-border rounded hover:border-primary hover:text-white text-gray-300 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                             >
                                 <span
                                     class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity rounded"
                                 ></span>
                                 <span
+                                    aria-hidden="true"
                                     class="material-symbols-outlined text-[18px]"
                                     >code</span
                                 >
@@ -207,19 +219,45 @@
         </div>
 
         <!-- Loading State -->
-        <div
-            v-if="loading"
-            class="w-full max-w-6xl text-center text-gray-400 py-12"
+        <p
+            v-if="loading && !project"
+            role="status"
+            class="w-full max-w-6xl font-mono text-sm text-gray-500 text-center py-12"
         >
-            <p>Loading project...</p>
-        </div>
+            {{ $t('projects.loadingProject') }}
+        </p>
 
-        <!-- Error State -->
+        <!-- Not found / error: salida de terminal con salida clara -->
         <div
-            v-if="error"
-            class="w-full max-w-6xl text-center text-red-400 py-12"
+            v-else-if="error"
+            role="alert"
+            class="w-full max-w-6xl bg-console-bg border border-console-border rounded-xl p-6 md:p-8 mb-16 font-mono text-sm"
         >
-            <p>{{ error }}</p>
+            <p class="flex flex-wrap gap-x-2">
+                <span class="text-green-400">pablo@portfolio:~$</span>
+                <span class="text-white break-all">cat ./projects/{{ route.params.id }}.yml</span>
+            </p>
+            <p class="mt-3 text-red-400">
+                {{ error === 'not-found' ? $t('projects.notFound') : $t('projects.loadError') }}
+            </p>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <router-link
+                    to="/projects"
+                    class="bg-primary text-white hover:bg-primary/90 px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                    <span aria-hidden="true" class="material-symbols-outlined text-sm">folder_open</span>
+                    <span>{{ $t('nav.projects') }}</span>
+                </router-link>
+                <button
+                    v-if="error !== 'not-found'"
+                    type="button"
+                    class="border border-console-border hover:border-primary text-gray-300 hover:text-white bg-[#21262d] px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    @click="loadProjectData(route.params.id)"
+                >
+                    <span aria-hidden="true" class="material-symbols-outlined text-sm">refresh</span>
+                    <span>{{ $t('common.retry') }}</span>
+                </button>
+            </div>
         </div>
 
         <!-- Related Projects -->
@@ -227,12 +265,12 @@
             <div
                 class="flex items-center gap-3 mb-6 border-b border-console-border pb-2"
             >
-                <span class="material-symbols-outlined text-primary"
+                <span aria-hidden="true" class="material-symbols-outlined text-primary"
                     >history</span
                 >
-                <h3 class="text-xl font-bold text-white font-mono"
-                    >Related Logs</h3
-                >
+                <h2 class="text-xl font-bold text-white font-mono">{{
+                    $t('projects.relatedLogs')
+                }}</h2>
                 <span class="text-gray-600 font-mono text-sm ml-auto"
                     >ls -t | head -n {{ relatedProjects.length }}</span
                 >
@@ -247,21 +285,27 @@
                         <div
                             class="p-2 bg-[#161b22] rounded-lg border border-console-border group-hover:border-primary/30 text-white"
                         >
-                            <span class="material-symbols-outlined">{{
+                            <span aria-hidden="true" class="material-symbols-outlined">{{
                                 related.icon || 'folder'
                             }}</span>
                         </div>
-                        <span class="text-xs font-mono text-gray-500">{{
-                            formatDate(related.updatedAt)
-                        }}</span>
+                        <time
+                            v-if="related.updatedAt"
+                            :datetime="related.updatedAt"
+                            class="text-xs font-mono text-gray-500"
+                            >{{ formatDate(related.updatedAt) }}</time
+                        >
                     </div>
-                    <h4
-                        @click="goToProject(related.id)"
-                        class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors cursor-pointer font-mono"
+                    <h3
+                        class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors font-mono [overflow-wrap:anywhere]"
                     >
-                        {{ related.title }}
-                    </h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">
+                        <router-link
+                            :to="`/projects/${related.id}`"
+                            class="rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            >{{ related.title }}</router-link
+                        >
+                    </h3>
+                    <p class="text-sm text-gray-400 mb-4 flex-grow [overflow-wrap:anywhere]">
                         {{ related.description }}
                     </p>
                     <div class="flex flex-wrap gap-2 mb-4">
@@ -275,11 +319,13 @@
                     </div>
                     <a
                         v-if="related.github"
-                        @click.prevent="openGitHub(related.github)"
-                        class="text-sm font-medium text-primary flex items-center gap-1 hover:underline cursor-pointer font-mono"
+                        :href="related.github"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="w-fit text-sm font-medium text-primary flex items-center gap-1 hover:underline underline-offset-4 font-mono rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     >
                         cd ./repo
-                        <span class="material-symbols-outlined text-[16px]"
+                        <span aria-hidden="true" class="material-symbols-outlined text-[16px]"
                             >arrow_forward</span
                         >
                     </a>
@@ -290,8 +336,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { formatRelativeDate } from '../utils/relativeTime.js';
 import { useI18n } from 'vue-i18n';
 import {
     getProjectById as getFirestoreProjectById,
@@ -302,12 +349,9 @@ import {
     getProjectById as getStaticProjectById,
     getRelatedProjects as getStaticRelatedProjects,
 } from '../data/static.js';
-import { useAdmin } from '../composables/useAuth.js';
 
 const route = useRoute();
-const router = useRouter();
 const { locale } = useI18n();
-const { isAdmin } = useAdmin();
 
 // TODO: Añadir funcionalidades de edición para admin
 // - Botón de editar proyecto
@@ -320,7 +364,13 @@ const relatedProjects = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
+// Cada carga recibe un número; si el visitante navega a otro proyecto o
+// cambia de idioma a mitad de una carga, la respuesta antigua se descarta.
+let loadRequest = 0;
+
 const loadProjectData = async (projectId) => {
+    const requestId = ++loadRequest;
+    const isCurrent = () => requestId === loadRequest;
     try {
         loading.value = true;
         error.value = null;
@@ -357,22 +407,25 @@ const loadProjectData = async (projectId) => {
             }
         }
 
+        if (!isCurrent()) return;
+
         if (!projectData) {
-            error.value = 'Project not found';
+            error.value = 'not-found';
             project.value = null;
             relatedProjects.value = [];
             return;
         }
 
         project.value = projectData;
-        relatedProjects.value = relatedData;
+        relatedProjects.value = relatedData || [];
     } catch (err) {
-        error.value = err.message || 'Error loading project';
+        if (!isCurrent()) return;
         console.error('Error loading project:', err);
+        error.value = 'load-failed';
         project.value = null;
         relatedProjects.value = [];
     } finally {
-        loading.value = false;
+        if (isCurrent()) loading.value = false;
     }
 };
 
@@ -400,32 +453,9 @@ const architectureText = computed(() => {
     return project.value.architecture;
 });
 
-const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+const formatDate = (dateString) =>
+    formatRelativeDate(dateString, locale.value);
 
-    if (diffDays === 1) return '1d ago';
-    if (diffDays < 7) return `${diffDays}d ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-    return `${Math.floor(diffDays / 30)}mo ago`;
-};
-
-const goBack = () => {
-    router.push('/projects');
-};
-
-const goToProject = (projectId) => {
-    router.push(`/projects/${projectId}`);
-};
-
-const openGitHub = (url) => {
-    if (url) {
-        window.open(url, '_blank', 'noopener,noreferrer');
-    }
-};
 
 // Cargar datos cuando cambia el ID del proyecto o el idioma
 watch(
@@ -446,8 +476,4 @@ watch(locale, async () => {
     }
 });
 
-onMounted(() => {
-    // Scroll al inicio cuando se monta por primera vez
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
 </script>

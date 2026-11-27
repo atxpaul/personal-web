@@ -58,9 +58,47 @@ export default {
     },
     projects: {
         latestDeployment: 'Latest Deployment',
+        subtitleDefault:
+            'Exploring infrastructure as code, container orchestration, and automation pipelines.',
+        searchLabel: 'Filter projects by name, description, or technology',
+        moreRepositories: 'More Repositories',
+        noResults: 'No projects match the current filters.',
+        clearFilters: 'Clear filters',
+        empty: 'No projects published yet.',
+        viewCode: 'View code',
+        loadingList: 'Loading projects...',
+        loadingProject: 'Loading project...',
+        relatedLogs: 'Related Logs',
+        notFound: 'No project with this ID exists. It may have been renamed or removed.',
+        loadError: "Couldn't load this project. Check your connection and try again.",
+        filterLabel: 'Filter by technology',
+    },
+    common: {
+        loading: 'Loading...',
+        retry: './retry.sh',
+        close: 'Close',
+    },
+    blog: {
+        comingSoon: 'No posts yet. Technical write-ups are on the way.',
+    },
+    notFound: {
+        title: 'command not found',
+        body: "This page doesn't exist. The link may be old or mistyped.",
+        home: 'cd ~',
+        projects: 'cd /projects',
+    },
+    login: {
+        subtitle: 'Sign in with your Google account',
+        cancel: 'Cancel',
+        google: 'Continue with Google',
+        loading: 'Signing in...',
+    },
+    header: {
+        language: 'Language',
+        menu: 'Toggle navigation',
     },
     footer: {
-        copyright: '© 2026 Pablo Pan Portfolio. Built with Tailwind CSS.',
+        copyright: '© {year} Pablo Pan Portfolio. Built with Tailwind CSS.',
         localStorageNotice:
             'We use local storage to remember your language preference.',
         online: 'Online',
